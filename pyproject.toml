@@ -24,6 +24,7 @@ requests = "^2.31.0"
 pywavelets = "^1.5.0"
 stochastic = {path = "src/stochastic"}
 python-dotenv = "^1.0.0"
+ipywidgets = "^8.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

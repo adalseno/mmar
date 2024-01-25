@@ -199,3 +199,21 @@ class MMAR:
         x = np.cumsum(np.sqrt(b**k[-1] * theta[:n]) * sigma_ret * norm.rvs(size=(n, num_sim)).T, axis =1)
         p = S0 * np.exp(x)
         return p
+    
+    def plot_density(self)->None:
+        ret = np.diff(self._log_prices)
+
+        # Standardize returns
+        ret_sd = (ret - np.mean(ret, axis=0, keepdims=True)) / np.std(ret, axis=0, ddof=1, keepdims=True)
+
+        # Plot density and standard normal distribution
+        x = np.arange(-5, 5, 0.1)
+
+        plt.figure(figsize=(16, 10))
+        plt.plot(x, norm.pdf(x), 'k-', lw=2, label='Standard Normal Distribution')
+        plt.hist(ret_sd, density=True, alpha=0.7, color='mediumspringgreen', label='Density of Standardized Returns', bins=30)
+        plt.xlabel('Standardized Returns')
+        plt.ylabel('Density')
+        plt.legend()
+        plt.show()
+        return
