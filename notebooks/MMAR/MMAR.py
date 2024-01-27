@@ -1,7 +1,7 @@
 from scipy.optimize import minimize_scalar
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import norm
+from scipy.stats import norm, zscore
 from scipy.optimize import root_scalar
 from numpy.random import normal
 import pandas as pd
@@ -9,7 +9,7 @@ import pandas as pd
 
 
 class MMAR:
-    def __init__(self, price:pd.DataFrame):
+    def __init__(self, price:pd.Series, seed:int=42):
         self.price = price
         self._log_prices = np.log(price.values)
         self._theta = None
@@ -21,6 +21,7 @@ class MMAR:
         self._c = None
         self._tau = None
         self._alpha_min = None 
+        self.seed = seed
         
         self._H = None
 
@@ -47,6 +48,23 @@ class MMAR:
     @property
     def alpha_min(self):
         return self._alpha_min
+    
+    @property
+    def tau(self):
+        return self._tau
+    
+    @property
+    def q(self):
+        return self._q
+    
+    @staticmethod
+    def divisors(n):
+        divs = [1]
+        for i in range(2,int(np.sqrt(n))+1):
+            if n%i == 0:
+                divs.extend([i,int(n/i)])
+        divs.extend([n])
+        return np.array(sorted(list(set(divs))))[:-1]
 
     
     def tauf(self, x):
@@ -59,7 +77,7 @@ class MMAR:
         res = minimize_scalar(F, bounds=(self._q[0], self._q[-1]))
         xs = res.x
         return alpha * xs - self.tauf(xs)
-
+    
     def get_alpha_min(self):
         q = np.array([100,99.99])
         t = np.array([2,3,4,5,10,15,20])
@@ -84,6 +102,15 @@ class MMAR:
         return self._alpha_min
 
 
+    def check_hurst(self):
+        if self.q is None:
+            self.get_scaling()
+        idx = np.argmax(self.q>0)
+        print(f"The hurst exponent must be {self.q[idx]:.2f} < Hurst < {self.q[idx-1]:.2f}")
+        return None
+        
+    
+    
     def get_scaling(self):
         q = np.linspace(0.01,10,1_000)
         t = np.array([2,3,4,5,10, 15,20])
@@ -114,54 +141,81 @@ class MMAR:
 
     def plot_scaling(self):
         self.config()
-        bm = 0.5 * self._q - 1
+        
+        hypothetical_tau = 0.5 * self._q - 1
         fig, ax = plt.subplots(1,2, figsize=(18,6))
-        ax[0].plot(self._q, bm, color='lightblue', linewidth=3, label='bm')
-        ax[0].plot(self._q, self._tau, color='purple', linewidth=3, label='tau')
+        ax[0].plot(self._q, hypothetical_tau, color='lightblue', linewidth=3, label='hypothetical monofractal')
+        ax[0].plot(self._q, self._tau, color='red', linewidth=3, label=r'observed $\tau $')
         ax[0].set_xlabel("q")
         ax[0].set_ylabel(r"$\tau(q)$")
+        ax[0].grid(True)
         ax[0].legend()
-        ax[1].plot(self._q, bm, color='lightblue', linewidth=3, label='bm')
+        ax[1].plot(self._q, hypothetical_tau, color='lightblue', linewidth=3, label='hypothetical monofractal')
         ax[1].plot(self._q, self._c, color='red', linewidth=3, label='c')
         ax[1].set_xlabel("q")
         ax[1].set_ylabel(r"$\tau(q)$")
+        ax[1].grid(True)
         ax[1].legend()
+        
+        plt.show()
+        return
     
+    def plot_qq(self):
+        # Standardize returns
+        ret_sd = zscore(self._log_prices)
+
+        # QQ plot
+        plt.figure(figsize=(8, 8))
+        plt.title('QQ Plot of Standardized Returns')
+        plt.xlabel('Theoretical Quantiles')
+        plt.ylabel('Standardized Returns')
+        plt.grid(True)
+        plt.scatter(np.sort(np.random.normal(size=len(ret_sd))), np.sort(ret_sd), alpha=0.7, label='QQ Plot')
+        ypoints = plt.ylim()
+        xpoints = plt.xlim()
+        limits = (min(ypoints[0], xpoints[0]), max(ypoints[1], xpoints[1]))
+        plt.ylim(limits)
+        plt.xlim(limits)
+        plt.plot(limits, limits, linestyle='-', color='r', lw=3)
+        plt.legend()
         plt.show()
         return 
 
+
     def get_hurst(self):
-        zero = root_scalar(self.tauf, bracket=[1.7, 2.91]).root
+        zero = root_scalar(self.tauf, bracket=[1.2, 3.91]).root
         self._H = 1/zero
         return self._H
-
 
     def plot_alpha(self):
         self.config()
             
         m = self._m
-        H = self._H
-        alpha = np.linspace(self._alpha_min, m, num=15)
-        
-        f = lambda x: 1 - (x - m)**2 / (4 * H * (m - H))
+        H = self.H
+        alpha = np.linspace(self.alpha_min, m, num=15)
+        def f(x):
+            return 1 - (x - m)**2 / (4 * H * (m - H))
+         
         ff = np.array([f(x) for x in alpha])
         
         plt.plot(alpha, ff, color='darkturquoise', linewidth=2, label='f')
+        plt.grid(True)
         plt.xlabel(r"$\alpha$")
         plt.ylabel(r"$f(\alpha)$")
         plt.legend()
         plt.show()
         return 
 
-    def get_params(self):            
+    def get_params(self):
+        np.random.seed(self.seed)            
         alpha = np.arange(self._alpha_min, 1.101, 0.001)
         spectr = np.array([self.legendre(x)  for x in alpha])
         self._m = alpha[np.where(spectr < 0.99)[-1][-1]]
         b = 2
         k = np.arange(1, 12)
         
-        self._mu = self._m / self._H
-        self._sigma = np.sqrt((2 * (self._mu - 1)) / np.log(b))
+        self._mu = self._m / self.H
+        self._sigma = np.sqrt((2 * (self.mu - 1)) / np.log(b))
         U = np.zeros((len(k), b))
 
         for kk in k:
@@ -174,8 +228,8 @@ class MMAR:
         
         self._theta = m2.flatten()
         
-        ret = np.diff(np.log(self.price.values))
-        self._sigma_ret = np.sqrt(np.var(ret))
+        ret = np.diff(self._log_prices)
+        self._sigma_ret = np.std(ret)
 
         return self._theta, self._sigma_ret
 
@@ -190,13 +244,13 @@ class MMAR:
             self.get_params()
         
 
-    def get_MMAR_MC(self, S0:float, n:int=30, num_sim:int=10_000)->np.ndarray:
+    def get_MMAR_MC(self, S0:float, n:int=30, num_sim:int=10_000, seed:int=1968)->np.ndarray:
         self.config()
         b = 2
         k = np.arange(1, 12)
-        theta = self._theta
-        sigma_ret = self._sigma_ret
-        x = np.cumsum(np.sqrt(b**k[-1] * theta[:n]) * sigma_ret * norm.rvs(size=(n, num_sim)).T, axis =1)
+        theta = self.theta
+        sigma_ret = self.sigma_ret
+        x = np.cumsum(np.sqrt(b**k[-1] * theta[:n]) * sigma_ret * norm.rvs(size=(n, num_sim), random_state=seed).T, axis =1)
         p = S0 * np.exp(x)
         return p
     
@@ -212,6 +266,7 @@ class MMAR:
         plt.figure(figsize=(16, 10))
         plt.plot(x, norm.pdf(x), 'k-', lw=2, label='Standard Normal Distribution')
         plt.hist(ret_sd, density=True, alpha=0.7, color='mediumspringgreen', label='Density of Standardized Returns', bins=30)
+        plt.grid(True)
         plt.xlabel('Standardized Returns')
         plt.ylabel('Density')
         plt.legend()
