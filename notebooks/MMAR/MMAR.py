@@ -77,7 +77,7 @@ class MMAR:
     # Statich methods
 
     @staticmethod
-    def divisors(n):
+    def divisors(n:int)->np.ndarray[int]:
         divs = [1]
         for i in range(2, int(np.sqrt(n)) + 1):
             if n % i == 0:
@@ -86,7 +86,7 @@ class MMAR:
         return np.array(sorted(list(set(divs))))[:-2]
 
     @staticmethod
-    def adf_test(timeseries, conf_level: float = 0.05):
+    def adf_test(timeseries:pd.Series|np.ndarray, conf_level: float = 0.05)->bool:
         print("Results of Dickey-Fuller Test:")
         test = adfuller(timeseries, autolag="AIC")
         output = pd.Series(
@@ -104,7 +104,7 @@ class MMAR:
         return output["p-value"] < conf_level
 
     @staticmethod
-    def kpss_test(timeseries, conf_level: float = 0.05):
+    def kpss_test(timeseries:pd.Series|np.ndarray, conf_level: float = 0.05)->bool:
         print("Results of KPSS Test:")
         test = kpss(timeseries, regression="c", nlags="auto")
         output = pd.Series(test[0:3], index=["Test Statistic", "p-value", "Lags Used"])
@@ -115,7 +115,7 @@ class MMAR:
 
     # Utility methods
 
-    def check_stationarity(self, conf_level: float = 0.05):
+    def check_stationarity(self, conf_level: float = 0.05)->None:
         timeseries = np.diff(self._log_prices)
         adf = self.adf_test(timeseries, conf_level)
         print()
@@ -135,7 +135,7 @@ class MMAR:
                 print("The time series is rend stationary")
         return None
 
-    def check_normality(self, conf_level: float = 0.05):
+    def check_normality(self, conf_level: float = 0.05)->None:
         timeseries = np.diff(self._log_prices)
         test = jarque_bera(timeseries)
         if test.pvalue < conf_level:
@@ -144,7 +144,7 @@ class MMAR:
             print("The time series is Normal distributed")
         return
 
-    def check_autocorrelation(self, conf_level: float = 0.05, lags: int = 10):
+    def check_autocorrelation(self, conf_level: float = 0.05, lags: int = 10)->None:
         timeseries = np.diff(self._log_prices)
         test = sm.stats.acorr_ljungbox(timeseries, lags=[lags])
         if test.loc[lags, "lb_pvalue"] < conf_level:
@@ -166,7 +166,7 @@ class MMAR:
         xs = res.x
         return alpha * xs - self.tauf(xs, q, tau)
 
-    def check_hurst(self):
+    def check_hurst(self)->None:
         if self.q is None:
             self.get_scaling()
         idx = np.argmax(self.q > 0)
@@ -190,7 +190,7 @@ class MMAR:
             # Partiton function
             for s, tt in enumerate(t):
                 x = np.arange(0, n, tt)
-                log_price_diff = log_prices[x[1:]] - log_prices[x[:-1]]
+                log_price_diff = np.diff(log_prices[x])
                 y[s] = np.log(np.sum(np.abs(log_price_diff) ** qq)) - log_n
             # Estimate tau with linear regression
             lm_result = np.polyfit(delta, y, 1)
@@ -207,12 +207,14 @@ class MMAR:
         t = self.divisors(n)
         delta = np.log(t)
         log_n = np.log(n)
+        # Partiton function
         for r, qq in enumerate(q):
             y = np.zeros(len(t))
             for s, tt in enumerate(t):
                 x = np.arange(0, n, tt)
-                log_price_diff = log_prices[x[1:]] - log_prices[x[:-1]]
+                log_price_diff = np.diff(log_prices[x])
                 y[s] = np.log(np.sum(np.abs(log_price_diff) ** qq)) - log_n
+            # Estimate tau with linear regression
             lm_result = np.polyfit(delta, y, 1)
             tau[r] = lm_result[0]
             c[r] = lm_result[1]
@@ -287,7 +289,7 @@ class MMAR:
 
     # Plot methods
 
-    def plot_scaling(self):
+    def plot_scaling(self)->None:
         self.config()
         hypothetical_tau = 0.5 * self._q - 1
         fig, ax = plt.subplots(1, 2, figsize=(18, 6))
@@ -320,7 +322,7 @@ class MMAR:
         plt.show()
         return
 
-    def plot_qq(self):
+    def plot_qq(self)->None:
         # Standardize returns
         ret_sd = zscore(self._log_prices)
         # QQ plot
@@ -345,7 +347,7 @@ class MMAR:
         plt.show()
         return
 
-    def plot_alpha(self):
+    def plot_alpha(self)->None:
         self.config()
 
         m = self._m
