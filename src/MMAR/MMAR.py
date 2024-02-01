@@ -7,6 +7,8 @@ from numpy.random import normal
 import pandas as pd
 from statsmodels.tsa.stattools import adfuller, kpss
 import statsmodels.api as sm
+from numba import njit, prange
+
 
 
 class MMAR:
@@ -25,7 +27,10 @@ class MMAR:
         self._tau = None
         self._alpha_min = None
         self.seed = seed
-        self._volume = volume.values
+        if volume is not None:
+            self._volume = volume.values
+        else:
+            self._volume = volume
         self._H = None
         self.post_init()
 
@@ -112,6 +117,20 @@ class MMAR:
             output["Critical Value (%s)" % key] = value
         print(output)
         return output["p-value"] < conf_level
+    
+    @staticmethod
+    @njit(cache=True, parallel=True, fastmath=True)
+    def compute_p(mul:np.ndarray[float], S0: float, n: int = 30, num_sim: int = 10_000,  seed: int = 1968)->np.ndarray[float]:
+        np.random.seed(seed)
+        y = normal(loc=0, scale=1, size=(n, num_sim)).T
+        x = np.empty(y.shape)
+        for i in prange(x.shape[0]):
+            x[i] = np.cumsum(
+                    mul
+                    * y[i]
+                )
+        p = S0 * np.exp(x)
+        return p
 
     # Utility methods
 
@@ -270,21 +289,18 @@ class MMAR:
         if self._m is None:
             self.get_params()
 
+    
+    
     def get_MMAR_MC(
         self, S0: float, n: int = 30, num_sim: int = 10_000, seed: int = 1968
     ) -> np.ndarray:
         self.config()
         b = 2
-        k = np.arange(1, 12)
         theta = self.theta
+        k = int(np.log2(len(theta)))
         sigma_ret = self.sigma_ret
-        x = np.cumsum(
-            np.sqrt(b ** k[-1] * theta[-n:])
-            * sigma_ret
-            * norm.rvs(size=(n, num_sim), random_state=seed).T,
-            axis=1,
-        )
-        p = S0 * np.exp(x)
+        mul = np.sqrt(np.power(2,k) * theta[-n:])* sigma_ret
+        p = self.compute_p(mul, S0, n, num_sim, seed)
         return p
 
     # Plot methods
