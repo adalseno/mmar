@@ -14,7 +14,17 @@ from numba import njit, prange
 class MMAR:
     def __init__(
         self, price: pd.Series, seed: int = 42, volume: pd.Series | None = None
-    ):
+    )->None:
+        """_summary_
+
+        Args:
+            price (pd.Series): _description_
+            seed (int, optional): _description_. Defaults to 42.
+            volume (pd.Series | None, optional): _description_. Defaults to None.
+
+        Returns:
+            None: _description_
+        """
         self.price = price
         self._log_prices = np.log(price.values)
         self._theta = None
@@ -34,7 +44,9 @@ class MMAR:
         self._H = None
         self.post_init()
 
-    def post_init(self):
+    def post_init(self)->None:
+        """_summary_
+        """
         n = len(self.price)
         m = n
         while len(self.divisors(m)) < 5:
@@ -49,40 +61,88 @@ class MMAR:
     # Properties
     @property
     def theta(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return self._theta
 
     @property
     def H(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return self._H
 
     @property
     def mu(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return self._mu
 
     @property
     def sigma(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return self._sigma
 
     @property
     def sigma_ret(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return self._sigma_ret
 
     @property
-    def alpha_min(self):
+    def alpha_min(self)->float:
+        """_summary_
+
+        Returns:
+            float: _description_
+        """
         return self._alpha_min
 
     @property
-    def tau(self):
+    def tau(self)->float:
+        """_summary_
+
+        Returns:
+            float: _description_
+        """
         return self._tau
 
     @property
-    def q(self):
+    def q(self)->float:
+        """_summary_
+
+        Returns:
+            float: _description_
+        """
         return self._q
 
     # Statich methods
 
     @staticmethod
     def divisors(n:int)->np.ndarray[int]:
+        """_summary_
+
+        Args:
+            n (int): _description_
+
+        Returns:
+            np.ndarray[int]: _description_
+        """
         divs = [1]
         for i in range(2, int(np.sqrt(n)) + 1):
             if n % i == 0:
@@ -92,6 +152,15 @@ class MMAR:
 
     @staticmethod
     def adf_test(timeseries:pd.Series|np.ndarray, conf_level: float = 0.05)->bool:
+        """_summary_
+
+        Args:
+            timeseries (pd.Series | np.ndarray): _description_
+            conf_level (float, optional): _description_. Defaults to 0.05.
+
+        Returns:
+            bool: _description_
+        """
         print("Results of Dickey-Fuller Test:")
         test = adfuller(timeseries, autolag="AIC")
         output = pd.Series(
@@ -110,6 +179,15 @@ class MMAR:
 
     @staticmethod
     def kpss_test(timeseries:pd.Series|np.ndarray, conf_level: float = 0.05)->bool:
+        """_summary_
+
+        Args:
+            timeseries (pd.Series | np.ndarray): _description_
+            conf_level (float, optional): _description_. Defaults to 0.05.
+
+        Returns:
+            bool: _description_
+        """
         print("Results of KPSS Test:")
         test = kpss(timeseries, regression="c", nlags="auto")
         output = pd.Series(test[0:3], index=["Test Statistic", "p-value", "Lags Used"])
@@ -121,6 +199,18 @@ class MMAR:
     @staticmethod
     @njit(cache=True, parallel=True, fastmath=True)
     def compute_p(mul:np.ndarray[float], S0: float, n: int = 30, num_sim: int = 10_000,  seed: int = 1968)->np.ndarray[float]:
+        """_summary_
+
+        Args:
+            mul (np.ndarray[float]): _description_
+            S0 (float): _description_
+            n (int, optional): _description_. Defaults to 30.
+            num_sim (int, optional): _description_. Defaults to 10_000.
+            seed (int, optional): _description_. Defaults to 1968.
+
+        Returns:
+            np.ndarray[float]: _description_
+        """
         np.random.seed(seed)
         y = normal(loc=0, scale=1, size=(n, num_sim)).T
         x = np.empty(y.shape)
@@ -135,6 +225,14 @@ class MMAR:
     # Utility methods
 
     def check_stationarity(self, conf_level: float = 0.05)->None:
+        """_summary_
+
+        Args:
+            conf_level (float, optional): _description_. Defaults to 0.05.
+
+        Returns:
+            _type_: _description_
+        """
         timeseries = np.diff(self._log_prices)
         adf = self.adf_test(timeseries, conf_level)
         print()
@@ -155,6 +253,11 @@ class MMAR:
         return None
 
     def check_normality(self, conf_level: float = 0.05)->None:
+        """_summary_
+
+        Args:
+            conf_level (float, optional): _description_. Defaults to 0.05.
+        """
         timeseries = np.diff(self._log_prices)
         test = jarque_bera(timeseries)
         if test.pvalue < conf_level:
@@ -164,6 +267,12 @@ class MMAR:
         return
 
     def check_autocorrelation(self, conf_level: float = 0.05, lags: int = 10)->None:
+        """_summary_
+
+        Args:
+            conf_level (float, optional): _description_. Defaults to 0.05.
+            lags (int, optional): _description_. Defaults to 10.
+        """
         timeseries = np.diff(self._log_prices)
         test = sm.stats.acorr_ljungbox(timeseries, lags=[lags])
         if test.loc[lags, "lb_pvalue"] < conf_level:
@@ -174,7 +283,17 @@ class MMAR:
             print("The time series is independently distributed")
         return
 
-    def tauf(self, x, q, tau):
+    def tauf(self, x, q, tau)->float:
+        """_summary_
+
+        Args:
+            x (_type_): _description_
+            q (_type_): _description_
+            tau (_type_): _description_
+
+        Returns:
+            float: _description_
+        """
         return np.interp(x, xp=q, fp=tau)
 
     def legendre(self, alpha, q, tau):
@@ -186,6 +305,11 @@ class MMAR:
         return alpha * xs - self.tauf(xs, q, tau)
 
     def check_hurst(self)->None:
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         if self.q is None:
             self.get_scaling()
         idx = np.argmax(self.q > 0)
@@ -196,7 +320,12 @@ class MMAR:
 
     # MMAR methods
 
-    def get_alpha_min(self):
+    def get_alpha_min(self)->float:
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         q = np.array([100, 99.99])
         tau = np.zeros_like(q)
         n = len(self.price)
@@ -217,7 +346,12 @@ class MMAR:
         self._alpha_min = (tau[0] - tau[1]) / (q[0] - q[1])
         return self._alpha_min
 
-    def get_scaling(self):
+    def get_scaling(self)->tuple[np.ndarray[float], np.ndarray[float], np.ndarray[float]]:
+        """_summary_
+
+        Returns:
+            tuple[np.ndarray[float], np.ndarray[float], np.ndarray[float]]: _description_
+        """
         q = np.linspace(0.01, 10.01, 1_000)
         tau = np.zeros_like(q)
         c = np.zeros_like(q)
@@ -242,12 +376,25 @@ class MMAR:
         self._c = np.concatenate(([1], c))
         return self._tau, self._c, self._q
 
-    def get_hurst(self):
+    def get_hurst(self)->float:
+        """_summary_
+
+        Returns:
+            float: _description_
+        """
         zero = root_scalar(self.tauf, args=(self.q, self.tau), bracket=[0.1, 4.9]).root
         self._H = 1 / zero
         return self._H
 
-    def get_params(self, K: int = 12):
+    def get_params(self, K: int = 12)-> tuple[np.ndarray[float], float]:
+        """_summary_
+
+        Args:
+            K (int, optional): _description_. Defaults to 12.
+
+        Returns:
+            tuple[np.ndarray[float], float]: _description_
+        """
         alpha = np.arange(0.001, 1.101, 0.001)
         spectr = np.array([self.legendre(x, self.q, self.tau) for x in alpha])
         self._m = alpha[np.where(spectr < 0.99)[-1][-1]]
@@ -279,7 +426,9 @@ class MMAR:
 
         return self._theta, self._sigma_ret
 
-    def config(self):
+    def config(self)-> None:
+        """_summary_
+        """
         if self._alpha_min is None:
             self.get_alpha_min()
         if self._q is None:
@@ -306,6 +455,8 @@ class MMAR:
     # Plot methods
 
     def plot_scaling(self)->None:
+        """_summary_
+        """
         self.config()
         hypothetical_tau = 0.5 * self._q - 1
         fig, ax = plt.subplots(1, 2, figsize=(18, 6))
@@ -339,6 +490,8 @@ class MMAR:
         return
 
     def plot_qq(self)->None:
+        """_summary_
+        """
         # Standardize returns
         ret_sd = zscore(self._log_prices)
         # QQ plot
@@ -364,6 +517,11 @@ class MMAR:
         return
 
     def plot_alpha(self)->None:
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         self.config()
 
         m = self._m
@@ -384,6 +542,8 @@ class MMAR:
         return
 
     def plot_density(self) -> None:
+        """_summary_
+        """
         ret = np.diff(self._log_prices)
 
         # Standardize returns
