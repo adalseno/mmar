@@ -1272,6 +1272,21 @@ files = [
 tests = ["asttokens (>=2.1.0)", "coverage", "coverage-enable-subprocess", "ipython", "littleutils", "pytest", "rich"]
 
 [[package]]
+name = "fbm"
+version = "0.3.0"
+description = "Fractional Brownian motion realizations."
+optional = false
+python-versions = "*"
+files = [
+    {file = "fbm-0.3.0-py2.py3-none-any.whl", hash = "sha256:8e03e230021f433d631dc289eecb6905a11a60eb6a89bd5a9dc4e66adcc22945"},
+    {file = "fbm-0.3.0-py3-none-any.whl", hash = "sha256:88d30a0851cbe72ba9c5cc1b668e9e1c49f460ace21cce6ebe7aa0b7f681d358"},
+    {file = "fbm-0.3.0.tar.gz", hash = "sha256:4f1cf868a3af0bb0da88e7a87bfc8f868817af29e926b4bebcc96d4c362e72ee"},
+]
+
+[package.dependencies]
+numpy = "*"
+
+[[package]]
 name = "filelock"
 version = "3.13.1"
 description = "A platform independent file lock."
@@ -1615,6 +1630,20 @@ all = ["chardet (>=2.2)", "genshi", "lxml"]
 chardet = ["chardet (>=2.2)"]
 genshi = ["genshi"]
 lxml = ["lxml"]
+
+[[package]]
+name = "hurst"
+version = "0.0.5"
+description = "Hurst exponent evaluation and R/S-analysis"
+optional = false
+python-versions = "*"
+files = [
+    {file = "hurst-0.0.5-py3-none-any.whl", hash = "sha256:d163f11fe2318aa8979c921d6667b8dfd6205c629924fefbed68505357cf995e"},
+]
+
+[package.dependencies]
+numpy = ">=1.10"
+pandas = ">=0.18"
 
 [[package]]
 name = "hydra-core"
@@ -4510,4 +4539,4 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.6"
-content-hash = "c035aaf1164bedf655d6623374d415e96e0c990ce474b5551bcd786dfbcb1eff"
+content-hash = "a2f3c9dca384c33eb78e806e60adfb472f049c269bddc08b03c72f8d681d33bc"
