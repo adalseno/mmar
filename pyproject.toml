@@ -30,6 +30,9 @@ python-dotenv = "^1.0.0"
 ipywidgets = "^8.1.1"
 fbm = "^0.3.0"
 hurst = "^0.0.5"
+catboost = "^1.2.2"
+optuna = "^3.5.0"
+ydata-profiling = {path = "src/ydata-profiling"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
