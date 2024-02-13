@@ -29,6 +29,14 @@ src.train\_model module
    :undoc-members:
    :show-inheritance:
 
+src.utility\_functions module
+-----------------------
+
+.. automodule:: src.utility_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
