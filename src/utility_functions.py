@@ -3,6 +3,7 @@ Helper functions
 
 
 """
+import lightgbm as lgb
 import matplotlib.pyplot as plt
 import numpy as np
 import optuna
@@ -15,10 +16,12 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
     classification_report,
     confusion_matrix,
+    roc_curve,
 )
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
 
 
 def display_report(y_test: np.ndarray, predictions: np.ndarray) -> None:
@@ -144,18 +147,32 @@ def plot_strategy(
 
 # Adapted from https://github.com/optuna/optuna-examples/blob/main/catboost/catboost_pruning.py
 def objective_catboost(
-    trial: optuna.Trial, X_train: pd.DataFrame, y_train: np.ndarray, metric: str
+    trial: optuna.Trial,
+    X_train: pd.DataFrame,
+    y_train: np.ndarray,
+    metric: str,
+    n_splits: int = 5,
 ) -> float:
     """Objective function for CatBoost
 
     Args:
-        trial (optuna.Trial): _description_
-        X_train (pd.DataFrame): _description_
-        y_train (np.ndarray): _description_
+        trial (optuna.Trial): optuna trial
+        X_train (pd.DataFrame): train set
+        y_train (np.ndarray): target
+        metric (str): the metric used
+        n_splits (int, optional): number of splits in the CV. Defaults to 5.
 
     Returns:
-        float: _description_
+        float: score (with penalty)
     """
+    # Translate metric
+    metrics = {
+        "accuracy": "Accuracy",
+        "precision": "Precision",
+        "f1": "F1",
+        "recall": "Recall",
+    }
+    cat_metric = metrics.get(metric, "Accuracy")
     param = {
         "objective": trial.suggest_categorical(
             "objective", ["Logloss", "CrossEntropy"]
@@ -184,12 +201,12 @@ def objective_catboost(
         [
             ("imputer", SimpleImputer(strategy="constant", fill_value=0.0)),
             (
-                "rf",
+                "clf",
                 CatBoostClassifier(
                     **param
                     | {
                         "used_ram_limit": "3gb",
-                        "eval_metric": "Accuracy",
+                        "eval_metric": cat_metric,
                         "early_stopping_rounds": 50,
                         "random_state": 1968,
                         "silent": True,
@@ -199,25 +216,30 @@ def objective_catboost(
         ]
     )
 
-    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=1968)
-
-    return cross_val_score(
-        model, X_train, y_train, cv=cv, scoring=metric, n_jobs=1
-    ).mean()
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=1968)
+    score = cross_val_score(model, X_train, y_train, cv=cv, scoring=metric, n_jobs=1)
+    # Penalize score dispersion
+    return score.mean() * (1 - score.var())
 
 
 def objective_logistic_regression(
-    trial: optuna.Trial, X_train: pd.DataFrame, y_train: np.ndarray, metric: str
+    trial: optuna.Trial,
+    X_train: pd.DataFrame,
+    y_train: np.ndarray,
+    metric: str,
+    n_splits: int = 10,
 ) -> float:
-    """Objective function for CatBoost
+    """Objective function for Logistic Regression
 
     Args:
-        trial (optuna.Trial): _description_
-        X_train (pd.DataFrame): _description_
-        y_train (np.ndarray): _description_
+        trial (optuna.Trial): optuna trial
+        X_train (pd.DataFrame): train set
+        y_train (np.ndarray): target
+        metric (str): the metric used
+        n_splits (int, optional): number of splits in the CV. Defaults to 10.
 
     Returns:
-        float: _description_
+        float: metric
     """
     param = {
         "solver": trial.suggest_categorical(
@@ -236,29 +258,34 @@ def objective_logistic_regression(
         [
             ("imputer", SimpleImputer(strategy="constant", fill_value=0.0)),
             ("scaler", StandardScaler()),
-            ("rf", LogisticRegression(**param, random_state=1968)),
+            ("clf", LogisticRegression(**param, random_state=1968)),
         ]
     )
 
-    cv = StratifiedKFold(n_splits=4, shuffle=True, random_state=1968)
-
-    return cross_val_score(
-        model, X_train, y_train, cv=cv, scoring=metric, n_jobs=1
-    ).mean()
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=1968)
+    score = cross_val_score(model, X_train, y_train, cv=cv, scoring=metric, n_jobs=1)
+    # Penalize score dispersion
+    return score.mean() * (1 - score.var())
 
 
 def objective_random_forest(
-    trial: optuna.Trial, X_train: pd.DataFrame, y_train: np.ndarray, metric: str
+    trial: optuna.Trial,
+    X_train: pd.DataFrame,
+    y_train: np.ndarray,
+    metric: str,
+    n_splits: int = 10,
 ) -> float:
-    """Objective function for CatBoost
+    """Objective function for Random Forest
 
     Args:
-        trial (optuna.Trial): _description_
-        X_train (pd.DataFrame): _description_
-        y_train (np.ndarray): _description_
+        trial (optuna.Trial): optuna trial
+        X_train (pd.DataFrame): train set
+        y_train (np.ndarray): target
+        metric (str): the metric used
+        n_splits (int, optional): number of splits in the CV. Defaults to 10.
 
     Returns:
-        float: _description_
+        float: metric
     """
     param = {
         "max_features": trial.suggest_categorical(
@@ -282,12 +309,130 @@ def objective_random_forest(
     model = Pipeline(
         [
             ("imputer", SimpleImputer(strategy="constant", fill_value=0.0)),
-            ("rf", RandomForestClassifier(**param, random_state=1968)),
+            ("clf", RandomForestClassifier(**param, random_state=1968)),
         ]
     )
 
-    cv = StratifiedKFold(n_splits=4, shuffle=True, random_state=1968)
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=1968)
+    score = cross_val_score(model, X_train, y_train, cv=cv, scoring=metric, n_jobs=1)
+    # Penalize score dispersion
+    return score.mean() * (1 - score.var())
 
-    return cross_val_score(
-        model, X_train, y_train, cv=cv, scoring=metric, n_jobs=1
-    ).mean()
+
+def objective_svc(
+    trial: optuna.Trial,
+    X_train: pd.DataFrame,
+    y_train: np.ndarray,
+    metric: str,
+    n_splits: int = 10,
+) -> float:
+    """Objective function for SVC
+
+    Args:
+        trial (optuna.Trial): optuna trial
+        X_train (pd.DataFrame): train set
+        y_train (np.ndarray): target
+        metric (str): the metric used
+        n_splits (int, optional): number of splits in the CV. Defaults to 10.
+
+    Returns:
+        float: metric
+    """
+    param = {
+        "kernel": trial.suggest_categorical(
+            "kernel",
+            ["linear", "poly", "rbf", "sigmoid"],
+        ),
+        "degree": trial.suggest_int("degree", 2, 6),
+        "C": trial.suggest_float("C", 0.01, 100, log=True),
+        "gamma": trial.suggest_categorical("gamma", ["auto", "scale"]),
+        "shrinking": trial.suggest_categorical(
+            "shrinking",
+            [True, False],
+        ),
+    }
+
+    model = Pipeline(
+        [
+            ("imputer", SimpleImputer(strategy="constant", fill_value=0.0)),
+            ("scaler", StandardScaler()),
+            ("clf", SVC(**param, random_state=1968)),
+        ]
+    )
+
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=1968)
+    score = cross_val_score(model, X_train, y_train, cv=cv, scoring=metric, n_jobs=1)
+    # Penalize score dispersion
+    return score.mean() * (1 - score.var())
+
+
+def select_threshold(
+    proba: np.ndarray[float], target: np.ndarray[int], fpr_max: float = 0.1
+) -> float:
+    """Compute the best threshold given the maximum acceptable false positive rate
+
+    Args:
+        proba (np.ndarray[float]): predicted probabilities
+        target (np.ndarray[int]): true values
+        fpr_max (float, optional): maximum acceptable false positive rate. Defaults to 0.1.
+
+    Returns:
+        float: best threshold
+    """
+    # calculate roc curves
+    fpr, _, thresholds = roc_curve(target, proba)
+    # get the best threshold with fpr <=0.1
+    best_threshold = thresholds[fpr <= fpr_max][-1]
+
+    return best_threshold
+
+
+# From https://github.com/optuna/optuna-examples/blob/main/lightgbm/lightgbm_simple.py
+def objective_lightgbm(
+    trial: optuna.Trial,
+    X_train: pd.DataFrame,
+    y_train: np.ndarray,
+    metric: str,
+    n_splits: int = 5,
+) -> float:
+    """Objective function for LightGBM
+
+    Args:
+        trial (optuna.Trial): optuna trial
+        X_train (pd.DataFrame): train set
+        y_train (np.ndarray): target
+        metric (str): the metric used
+        n_splits (int, optional): number of splits in the CV. Defaults to 5.
+
+    Returns:
+        float: mean score (with penalty)
+    """
+    param = {
+        "objective": "binary",
+        "metric": "average_precision",
+        "verbosity": -1,
+        "boosting_type": "gbdt",
+        "lambda_l1": trial.suggest_float("lambda_l1", 1e-8, 10.0, log=True),
+        "lambda_l2": trial.suggest_float("lambda_l2", 1e-8, 10.0, log=True),
+        "num_leaves": trial.suggest_int("num_leaves", 2, 256),
+        "feature_fraction": trial.suggest_float("feature_fraction", 0.4, 1.0),
+        "bagging_fraction": trial.suggest_float("bagging_fraction", 0.4, 1.0),
+        "bagging_freq": trial.suggest_int("bagging_freq", 1, 7),
+        "min_child_samples": trial.suggest_int("min_child_samples", 5, 100),
+    }
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=1968)
+    score = cross_val_score(
+        lgb.LGBMClassifier(
+            **param
+            | {
+                "random_state": 1968,
+            }
+        ),
+        X_train.fillna(0.0),
+        y_train,
+        cv=cv,
+        scoring=metric,
+        n_jobs=1,
+    )
+    # Penalize score dispersion
+    return score.mean() * (1 - score.std())
