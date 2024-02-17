@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src package &mdash; Options&#39; pricing with MMAR model 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Options' pricing with MMAR model
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">src package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-src.process">src.process module</a><ul>
+<li><a class="reference internal" href="#src.process.process_data"><code class="docutils literal notranslate"><span class="pre">process_data()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.train_model">src.train_model module</a><ul>
+<li><a class="reference internal" href="#src.train_model.train_model"><code class="docutils literal notranslate"><span class="pre">train_model()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#src-utility-functions-module">src.utility_functions module</a><ul>
+<li><a class="reference internal" href="#src.utility_functions.backtest_strategy"><code class="docutils literal notranslate"><span class="pre">backtest_strategy()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.display_report"><code class="docutils literal notranslate"><span class="pre">display_report()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.objective_catboost"><code class="docutils literal notranslate"><span class="pre">objective_catboost()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.objective_lightgbm"><code class="docutils literal notranslate"><span class="pre">objective_lightgbm()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.objective_logistic_regression"><code class="docutils literal notranslate"><span class="pre">objective_logistic_regression()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.objective_random_forest"><code class="docutils literal notranslate"><span class="pre">objective_random_forest()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.objective_svc"><code class="docutils literal notranslate"><span class="pre">objective_svc()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.plot_feature_imp"><code class="docutils literal notranslate"><span class="pre">plot_feature_imp()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.plot_strategy"><code class="docutils literal notranslate"><span class="pre">plot_strategy()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.select_threshold"><code class="docutils literal notranslate"><span class="pre">select_threshold()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Options' pricing with MMAR model</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/src.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-package">
+<h1>src package<a class="headerlink" href="#src-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="src.HurstIndexSolver.html">src.HurstIndexSolver package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#module-src.HurstIndexSolver.AddMethods">src.HurstIndexSolver.AddMethods module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods"><code class="docutils literal notranslate"><span class="pre">AddMethods</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.Divisors"><code class="docutils literal notranslate"><span class="pre">AddMethods.Divisors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.FixedPointSolver"><code class="docutils literal notranslate"><span class="pre">AddMethods.FixedPointSolver()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.LocalMin"><code class="docutils literal notranslate"><span class="pre">AddMethods.LocalMin()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.OLE_linprog"><code class="docutils literal notranslate"><span class="pre">AddMethods.OLE_linprog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.findOptN"><code class="docutils literal notranslate"><span class="pre">AddMethods.findOptN()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#module-src.HurstIndexSolver.HurstIndexSolver">src.HurstIndexSolver.HurstIndexSolver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstAWC"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstAWC()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstAbsoluteMoments"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstAbsoluteMoments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstAggregateVariance"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstAggregateVariance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstClustering"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstClustering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstDFAnalysis"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstDFAnalysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstGHE"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstGHE()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstHiguchi"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstHiguchi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstKS"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstKS()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstLSSD"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstLSSD()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstLSV"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstLSV()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstLocalWhittle"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstLocalWhittle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstPeriodogram"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstPeriodogram()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstRSAnalysis"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstRSAnalysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstRSAnalysis2"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstRSAnalysis2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstRegrResid"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstRegrResid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstTA"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstTA()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstTTA"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstTTA()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstVVL"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstVVL()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.RS4Hurst"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.RS4Hurst()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#module-src.HurstIndexSolver.fgn">src.HurstIndexSolver.fgn module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.fgn.autocovariance"><code class="docutils literal notranslate"><span class="pre">autocovariance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.fgn.fgn"><code class="docutils literal notranslate"><span class="pre">fgn()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#module-src.HurstIndexSolver">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src.MMAR.html">src.MMAR package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.MMAR.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.MMAR.html#module-src.MMAR.MMAR">src.MMAR.MMAR module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR"><code class="docutils literal notranslate"><span class="pre">MMAR</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.H"><code class="docutils literal notranslate"><span class="pre">MMAR.H</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.adf_test"><code class="docutils literal notranslate"><span class="pre">MMAR.adf_test()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.alpha_min"><code class="docutils literal notranslate"><span class="pre">MMAR.alpha_min</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.check_autocorrelation"><code class="docutils literal notranslate"><span class="pre">MMAR.check_autocorrelation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.check_hurst"><code class="docutils literal notranslate"><span class="pre">MMAR.check_hurst()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.check_normality"><code class="docutils literal notranslate"><span class="pre">MMAR.check_normality()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.check_stationarity"><code class="docutils literal notranslate"><span class="pre">MMAR.check_stationarity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.compute_p"><code class="docutils literal notranslate"><span class="pre">MMAR.compute_p()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.config"><code class="docutils literal notranslate"><span class="pre">MMAR.config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.divisors"><code class="docutils literal notranslate"><span class="pre">MMAR.divisors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.get_MMAR_MC"><code class="docutils literal notranslate"><span class="pre">MMAR.get_MMAR_MC()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.get_alpha_min"><code class="docutils literal notranslate"><span class="pre">MMAR.get_alpha_min()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.get_hurst"><code class="docutils literal notranslate"><span class="pre">MMAR.get_hurst()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.get_params"><code class="docutils literal notranslate"><span class="pre">MMAR.get_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.get_scaling"><code class="docutils literal notranslate"><span class="pre">MMAR.get_scaling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.kpss_test"><code class="docutils literal notranslate"><span class="pre">MMAR.kpss_test()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.legendre"><code class="docutils literal notranslate"><span class="pre">MMAR.legendre()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.mu"><code class="docutils literal notranslate"><span class="pre">MMAR.mu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.plot_alpha"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_alpha()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.plot_density"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_density()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.plot_qq"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_qq()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.plot_scaling"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_scaling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.post_init"><code class="docutils literal notranslate"><span class="pre">MMAR.post_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.q"><code class="docutils literal notranslate"><span class="pre">MMAR.q</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.sigma"><code class="docutils literal notranslate"><span class="pre">MMAR.sigma</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.sigma_ret"><code class="docutils literal notranslate"><span class="pre">MMAR.sigma_ret</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.tau"><code class="docutils literal notranslate"><span class="pre">MMAR.tau</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.tauf"><code class="docutils literal notranslate"><span class="pre">MMAR.tauf()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.theta"><code class="docutils literal notranslate"><span class="pre">MMAR.theta</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.normal"><code class="docutils literal notranslate"><span class="pre">normal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.MMAR.html#module-src.MMAR">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.process">
+<span id="src-process-module"></span><h2>src.process module<a class="headerlink" href="#module-src.process" title="Link to this heading"></a></h2>
+<p>This is the demo code that uses hydra to access the parameters in under the directory config.</p>
+<p>Author: Khuyen Tran</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.process.process_data">
+<span class="sig-prename descclassname"><span class="pre">src.process.</span></span><span class="sig-name descname"><span class="pre">process_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DictConfig</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/process.html#process_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.process.process_data" title="Link to this definition"></a></dt>
+<dd><p>Function to process the data</p>
+</dd></dl>
+
+</section>
+<section id="module-src.train_model">
+<span id="src-train-model-module"></span><h2>src.train_model module<a class="headerlink" href="#module-src.train_model" title="Link to this heading"></a></h2>
+<p>This is the demo code that uses hy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      dra to access the parameters in under the directory config.</p>
+<p>Author: Khuyen Tran</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.train_model.train_model">
+<span class="sig-prename descclassname"><span class="pre">src.train_model.</span></span><span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DictConfig</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/train_model.html#train_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.train_model.train_model" title="Link to this definition"></a></dt>
+<dd><p>Function to train the model</p>
+</dd></dl>
+
+</section>
+<section id="src-utility-functions-module">
+<h2>src.utility_functions module<a class="headerlink" href="#src-utility-functions-module" title="Link to this heading"></a></h2>
+<p id="module-src.utility_functions">Helper functions</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.backtest_strategy">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">backtest_strategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ml_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#backtest_strategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.backtest_strategy" title="Link to this definition"></a></dt>
+<dd><p>Create a basic strategy dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predictions</strong> (<em>np.ndarray</em>) – predictions array</p></li>
+<li><p><strong>X_test</strong> (<em>pd.DataFrame</em>) – test df</p></li>
+<li><p><strong>spy</strong> (<em>pd.DataFrame</em>) – quotation df</p></li>
+<li><p><strong>ml_df</strong> (<em>pd.DataFrame</em>) – ml df</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>strategy df</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.display_report">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">display_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#display_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.display_report" title="Link to this definition"></a></dt>
+<dd><p>Display classification report and confusion matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_test</strong> (<em>np.ndarray</em>) – true values</p></li>
+<li><p><strong>predictions</strong> (<em>np.ndarray</em>) – predicted values</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.objective_catboost">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">objective_catboost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#objective_catboost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.objective_catboost" title="Link to this definition"></a></dt>
+<dd><p>Objective function for CatBoost</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trial</strong> (<em>optuna.Trial</em>) – optuna trial</p></li>
+<li><p><strong>X_train</strong> (<em>pd.DataFrame</em>) – train set</p></li>
+<li><p><strong>y_train</strong> (<em>np.ndarray</em>) – target</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – the metric used</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – number of splits in the CV. Defaults to 5.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>score (with penalty)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.objective_lightgbm">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">objective_lightgbm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#objective_lightgbm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.objective_lightgbm" title="Link to this definition"></a></dt>
+<dd><p>Objective function for LightGBM</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trial</strong> (<em>optuna.Trial</em>) – optuna trial</p></li>
+<li><p><strong>X_train</strong> (<em>pd.DataFrame</em>) – train set</p></li>
+<li><p><strong>y_train</strong> (<em>np.ndarray</em>) – target</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – the metric used</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – number of splits in the CV. Defaults to 5.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean score (with penalty)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.objective_logistic_regression">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">objective_logistic_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#objective_logistic_regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.objective_logistic_regression" title="Link to this definition"></a></dt>
+<dd><p>Objective function for Logistic Regression</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trial</strong> (<em>optuna.Trial</em>) – optuna trial</p></li>
+<li><p><strong>X_train</strong> (<em>pd.DataFrame</em>) – train set</p></li>
+<li><p><strong>y_train</strong> (<em>np.ndarray</em>) – target</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – the metric used</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – number of splits in the CV. Defaults to 10.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>metric</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.objective_random_forest">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">objective_random_forest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#objective_random_forest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.objective_random_forest" title="Link to this definition"></a></dt>
+<dd><p>Objective function for Random Forest</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trial</strong> (<em>optuna.Trial</em>) – optuna trial</p></li>
+<li><p><strong>X_train</strong> (<em>pd.DataFrame</em>) – train set</p></li>
+<li><p><strong>y_train</strong> (<em>np.ndarray</em>) – target</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – the metric used</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – number of splits in the CV. Defaults to 10.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>metric</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.objective_svc">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">objective_svc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#objective_svc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.objective_svc" title="Link to this definition"></a></dt>
+<dd><p>Objective function for SVC</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trial</strong> (<em>optuna.Trial</em>) – optuna trial</p></li>
+<li><p><strong>X_train</strong> (<em>pd.DataFrame</em>) – train set</p></li>
+<li><p><strong>y_train</strong> (<em>np.ndarray</em>) – target</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – the metric used</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – number of splits in the CV. Defaults to 10.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>metric</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.plot_feature_imp">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">plot_feature_imp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coefficients</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#plot_feature_imp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.plot_feature_imp" title="Link to this definition"></a></dt>
+<dd><p>Plot feature importance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coefficients</strong> (<em>np.ndarray</em><em>[</em><em>float</em><em>]</em>) – coefficients</p></li>
+<li><p><strong>columns</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – feature names</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.plot_strategy">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">plot_strategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy_desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#plot_strategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.plot_strategy" title="Link to this definition"></a></dt>
+<dd><p>Plot the strategy vs bare strategy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>strategy_df</strong> (<em>pd.DataFrame</em>) – strategy df</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) – name of the model used</p></li>
+<li><p><strong>strategy_desc</strong> (<em>str</em>) – additional stragey description</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.select_threshold">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">select_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proba</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fpr_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#select_threshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.select_threshold" title="Link to this definition"></a></dt>
+<dd><p>Compute the best threshold given the maximum acceptable false positive rate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>proba</strong> (<em>np.ndarray</em><em>[</em><em>float</em><em>]</em>) – predicted probabilities</p></li>
+<li><p><strong>target</strong> (<em>np.ndarray</em><em>[</em><em>int</em><em>]</em>) – true values</p></li>
+<li><p><strong>fpr_max</strong> (<em>float</em><em>, </em><em>optional</em>) – maximum acceptable false positive rate. Defaults to 0.1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>best threshold</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src" title="Link to this heading"></a></h2>
+<p>Source code of your project</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Andrea Dalseno, Vsevolod Cherepanov, Sanchit Jain.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

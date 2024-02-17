@@ -4,6 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["Andrea Dalseno, Sanchit Jain, Vsevolod CherepanovS"]
 
+[tool.poetry.group.dev]
+optional = true
+
 [tool.poetry.dependencies]
 python = "3.11.6"
 dvc = "^2.10.0"
@@ -20,10 +23,27 @@ scikit-learn = "^1.3.2"
 yfinance = "^0.2.33"
 ipykernel = "^6.27.1"
 dvc-s3 = "^2.23.0"
+requests = "^2.31.0"
+pywavelets = "^1.5.0"
+stochastic = {path = "src/stochastic"}
+python-dotenv = "^1.0.0"
+ipywidgets = "^8.1.1"
+fbm = "^0.3.0"
+hurst = "^0.0.5"
+catboost = "^1.2.2"
+optuna = "^3.5.0"
+ydata-profiling = {path = "src/ydata-profiling"}
+lightgbm = "^4.3.0"
+notebook = "^7.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 pre-commit = "^2.17.0"
+
+[tool.poetry.group.dev.dependencies]
+sphinx-rtd-theme = "^2.0.0"
+hurst = "^0.0.5"
+fbm = "^0.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,0 +1,29 @@
+test_size: 300
+control_params:
+  model_name: LightGBM
+  objective: binary
+  metric: average_precision
+  verbosity: -1
+  boosting_type: gbdt
+  lambda_l1: 4.1342972795431155e-05
+  lambda_l2: 1.8274447801521803
+  num_leaves: 219
+  feature_fraction: 0.9858923882998724
+  bagging_fraction: 0.925196810349399
+  bagging_freq: 1
+  min_child_samples: 10
+  random_state: 1968
+mmar_params:
+  model_name: LightGBM
+  objective: binary
+  metric: average_precision
+  verbosity: -1
+  boosting_type: gbdt
+  lambda_l1: 1.9778869988232345e-06
+  lambda_l2: 1.6078475758773735e-07
+  num_leaves: 227
+  feature_fraction: 0.6103578367044774
+  bagging_fraction: 0.8474595124557138
+  bagging_freq: 7
+  min_child_samples: 10
+  random_state: 1968

@@ -4,11 +4,24 @@ hydra:
     dir: .
 
 defaults:
-  - process: process1
-  - model: model1
+  - model_params/199@model_params.199
+  - model_params/300@model_params.300
+  - model_params/400@model_params.400
   - _self_
 
-data:
+local_paths:
   raw: data/raw/sample.csv
   processed: data/processed/processed.csv
   final: data/final/final.csv
+
+main_params:
+  timeout: 600
+  fpr_max: 0.05
+  metric: precision
+  seed: 1968
+
+
+    
+
+
+
