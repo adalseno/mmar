@@ -34,6 +34,7 @@ catboost = "^1.2.2"
 optuna = "^3.5.0"
 ydata-profiling = {path = "src/ydata-profiling"}
 lightgbm = "^4.3.0"
+notebook = "^7.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
