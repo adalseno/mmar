@@ -412,22 +412,27 @@ def objective_lightgbm(
         "metric": "average_precision",
         "verbosity": -1,
         "boosting_type": "gbdt",
+        "random_state": 1968,
         "lambda_l1": trial.suggest_float("lambda_l1", 1e-8, 10.0, log=True),
         "lambda_l2": trial.suggest_float("lambda_l2", 1e-8, 10.0, log=True),
         "num_leaves": trial.suggest_int("num_leaves", 2, 256),
-        "feature_fraction": trial.suggest_float("feature_fraction", 0.4, 1.0),
-        "bagging_fraction": trial.suggest_float("bagging_fraction", 0.4, 1.0),
+        "min_sum_hessian_in_leaf": trial.suggest_float(
+            "min_sum_hessian_in_leaf", 1e-6, 10.0, log=True
+        ),
+        "feature_fraction": trial.suggest_float("feature_fraction", 0.2, 1.0),
+        "feature_fraction_bynode": trial.suggest_float(
+            "feature_fraction_bynode", 0.2, 1.0
+        ),
+        "bagging_fraction": trial.suggest_float("bagging_fraction", 0.2, 1.0),
         "bagging_freq": trial.suggest_int("bagging_freq", 1, 7),
         "min_child_samples": trial.suggest_int("min_child_samples", 5, 100),
+        "num_grad_quant_bins": trial.suggest_int("num_grad_quant_bins", 4, 12),
+        "max_depth": trial.suggest_int("max_depth", 2, 18),
+        "extra_trees": trial.suggest_categorical("extra_trees", [True, False]),
     }
     cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=1968)
     score = cross_val_score(
-        lgb.LGBMClassifier(
-            **param
-            | {
-                "random_state": 1968,
-            }
-        ),
+        lgb.LGBMClassifier(**param),
         X_train.fillna(0.0),
         y_train,
         cv=cv,
