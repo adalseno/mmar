@@ -1,4 +1,7 @@
-# wqu_capstone
+# Modeling Options Prices considering Mandelbrotian Movement of Prices
+Capstone project for the MScFE course at [World Quant University](https://www.wqu.edu/programs/mscfe/) (February 2024)
+
+The repo is built following this post: https://khuyentran1401.github.io/reproducible-data-science/structure_project/introduction.html
 
 ## Tools used in this project
 * [Poetry](https://towardsdatascience.com/how-to-effortlessly-publish-your-python-package-to-pypi-using-poetry-44b305362f9f): Dependency management - [article](https://mathdatasimplified.com/2023/06/12/poetry-a-better-way-to-manage-python-dependencies/)
