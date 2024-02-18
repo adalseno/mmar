@@ -3,6 +3,8 @@ Helper functions
 
 
 """
+import os
+
 import lightgbm as lgb
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,6 +18,7 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
     classification_report,
     confusion_matrix,
+    precision_score,
     roc_curve,
 )
 from sklearn.model_selection import StratifiedKFold, cross_val_score
@@ -24,19 +27,24 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
 
-def display_report(y_test: np.ndarray, predictions: np.ndarray) -> None:
+def display_report(
+    y_test: np.ndarray, predictions: np.ndarray
+) -> tuple[float, float, float, float]:
     """Display classification report and confusion matrix
 
     Args:
         y_test (np.ndarray): true values
         predictions (np.ndarray): predicted values
+
+    Returns:
+        tuple[float,float,float,float]: true negative, false positive, false negative, true positive
     """
     print(classification_report(y_test, predictions))
     cm = confusion_matrix(y_test, predictions)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm)
     disp.plot()
     plt.show()
-    return
+    return cm.ravel()  # tn, fp, fn, tp
 
 
 def plot_feature_imp(coefficients: np.ndarray[float], columns: list[str]) -> None:
@@ -394,6 +402,9 @@ def objective_lightgbm(
     y_train: np.ndarray,
     metric: str,
     n_splits: int = 5,
+    seed: int = 1968,
+    max_iter: int = 35,
+    max_dep: int = 12,
 ) -> float:
     """Objective function for LightGBM
 
@@ -402,19 +413,29 @@ def objective_lightgbm(
         X_train (pd.DataFrame): train set
         y_train (np.ndarray): target
         metric (str): the metric used
-        n_splits (int, optional): number of splits in the CV. Defaults to 5.
+        n_splits (int, optional): number of splits in the CV. Defaults to 5
+        seed (int, optional): seed for Kfold. Default to 1968
+        max_iter (int, optional): maximun number of iterations, to prevent overfitting. Default to 35
+        max_dep (int, optional): maximum depth, to prevent overfitting. Default to 12
 
     Returns:
         float: mean score (with penalty)
     """
+    # Limit the number of iterations and max_depth
+    # when we have enough features to prevent overfitting
+
     param = {
         "objective": "binary",
-        "metric": "average_precision",
+        "metric": metric,
         "verbosity": -1,
         "boosting_type": "gbdt",
         "random_state": 1968,
-        "lambda_l1": trial.suggest_float("lambda_l1", 1e-8, 10.0, log=True),
-        "lambda_l2": trial.suggest_float("lambda_l2", 1e-8, 10.0, log=True),
+        "early_stopping_round": 15,
+        "n_estimators": trial.suggest_int(
+            "n_estimators", 10, max_iter, step=5, log=False
+        ),
+        "lambda_l1": trial.suggest_float("lambda_l1", 1e-8, 20.0, log=True),
+        "lambda_l2": trial.suggest_float("lambda_l2", 1e-8, 20.0, log=True),
         "num_leaves": trial.suggest_int("num_leaves", 2, 256),
         "min_sum_hessian_in_leaf": trial.suggest_float(
             "min_sum_hessian_in_leaf", 1e-6, 10.0, log=True
@@ -427,17 +448,93 @@ def objective_lightgbm(
         "bagging_freq": trial.suggest_int("bagging_freq", 1, 7),
         "min_child_samples": trial.suggest_int("min_child_samples", 5, 100),
         "num_grad_quant_bins": trial.suggest_int("num_grad_quant_bins", 4, 12),
-        "max_depth": trial.suggest_int("max_depth", 2, 18),
+        "max_depth": trial.suggest_int("max_depth", 2, max_dep),
         "extra_trees": trial.suggest_categorical("extra_trees", [True, False]),
     }
-    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=1968)
-    score = cross_val_score(
-        lgb.LGBMClassifier(**param),
-        X_train.fillna(0.0),
-        y_train,
-        cv=cv,
-        scoring=metric,
-        n_jobs=1,
-    )
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=seed)
+    scores = []
+    for train_index, test_index in cv.split(X_train, y_train):
+        X_train_set, X_test = X_train.iloc[train_index], X_train.iloc[test_index]
+        y_train_set, y_test = y_train[train_index], y_train[test_index]
+
+        # Train a LightGBM model
+        model = lgb.LGBMClassifier(**param)
+        model.fit(
+            X_train_set,
+            y_train_set,
+            eval_set=(X_test, y_test),
+            eval_metric=metric,
+        )
+
+        # Make predictions on the test set
+        y_pred = model.predict(X_test)
+        # Calculate accuracy and store it in the metrics list
+        score = precision_score(y_test, y_pred)
+        scores.append(score)
+        # Log to see the best iteration
+        """ logging.warning(
+            "Best iterations: %s for trial number %s with score %s", model.best_iteration_, trial.number, np.round(score,4)
+        ) """
+
     # Penalize score dispersion
-    return score.mean() * (1 - score.std())
+    return np.mean(scores) * (1 - np.std(scores))
+
+
+def tune_params(
+    X_train: pd.DataFrame,
+    y_train: np.ndarray,
+    metric: str,
+    timeout: int,
+    max_iter: int = 35,
+    max_dep: int = 12,
+    n_splits: int = 5,
+) -> dict:
+    """Tune hyperparameters using Otuna
+
+    Args:
+        X_train (pd.DataFrame): Train set
+        y_train (np.ndarray): train labels
+        metric (str): metric to use
+        timeout (int): timeout
+        max_iter (int, optional): maximun number of iterations, to prevent overfitting. Default to 35
+        max_dep (int, optional): maximum depth, to prevent overfitting. Default to 12
+        n_splits (int, optional): number of splits in Kfold. Default to 5
+
+    Returns:
+        dict: tuned parameters
+    """
+    # Set hash seed for reproducibility
+    hashseed = os.getenv("PYTHONHASHSEED")
+    os.environ["PYTHONHASHSEED"] = "0"
+    study = optuna.create_study(
+        direction="maximize",
+        sampler=optuna.samplers.TPESampler(seed=1968, n_startup_trials=0),
+    )
+    study.optimize(
+        lambda trial: objective_lightgbm(
+            trial,
+            X_train,
+            y_train,
+            metric,
+            max_iter=max_iter,
+            max_dep=max_dep,
+            n_splits=n_splits,
+        ),
+        n_trials=150,
+        timeout=timeout,
+    )
+
+    print("Number of finished trials: {}".format(len(study.trials)))
+
+    print("Best trial:")
+    trial = study.best_trial
+    print(f"  Number: {trial.number}")
+    print(f"  Value: {trial.value}")
+
+    print("  Params: ")
+    for key, value in trial.params.items():
+        print(f"    {key}: {value}")
+    # Restore hash seed
+    if hashseed is not None:
+        os.environ["PYTHONHASHSEED"] = hashseed
+    return trial.params
