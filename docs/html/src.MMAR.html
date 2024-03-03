@@ -123,7 +123,7 @@
 <span id="src-mmar-mmar-module"></span><h2>src.MMAR.MMAR module<a class="headerlink" href="#module-src.MMAR.MMAR" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.MMAR.MMAR.</span></span><span class="sig-name descname"><span class="pre">MMAR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.MMAR.MMAR.</span></span><span class="sig-name descname"><span class="pre">MMAR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.H">
@@ -307,6 +307,12 @@ Case 3: KPSS indicates stationarity and ADF indicates non-stationarity - The ser
 </dl>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}X(t,1) = \underbrace {\sqrt {b^k \cdot \theta_{k}(t)}}_{\sigma(t)} \cdot \sigma \cdot [B_{H}(t) -B_{H}(t-1)]\\\text{mul } = \sqrt {b^k \cdot \theta_{k}(t)} \cdot \sigma\end{aligned}\end{align} \]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When the length of the simulation <em>n</em> is different than that of Theta, we should decide what values to use.
+In this case we decided to use the last values <cite>theta[-n:]</cite>, but maybe a random selection might be preferable.
+Something like <cite>np.random.choice(theta, size=n, replace=False)</cite>.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>simulated data</p>
@@ -352,17 +358,14 @@ The smallest alpha for which the multifractal spectrum is defined.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_params" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_params" title="Link to this definition"></a></dt>
 <dd><p>Compute main parameters for the MMAR model</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>K</strong> (<em>int</em><em>, </em><em>optional</em>) – _description_. Defaults to 12.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Theta values, returns volatility</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>_description_</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>tuple[np.ndarray[float], float]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[np.ndarray[float], float]</p>
 </dd>
 </dl>
 </dd></dl>

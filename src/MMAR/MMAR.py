@@ -13,7 +13,7 @@ from statsmodels.tsa.stattools import adfuller, kpss
 
 class MMAR:
     def __init__(
-        self, price: pd.Series, seed: int = 42, volume: pd.Series | None = None
+        self, price: pd.Series, seed: int = 42, volume: pd.Series | None = None, silent:bool=False
     ) -> None:
         """Class to build a MMAR model starting from actual data
 
@@ -21,6 +21,7 @@ class MMAR:
             price (pd.Series): price series
             seed (int, optional): seed. Defaults to 42.
             volume (pd.Series | None, optional): volume series. Defaults to None.
+            silent (bool, optional): wheter to print warnings. Defaults to False.
 
         Returns:
             None
@@ -44,6 +45,7 @@ class MMAR:
         else:
             self._volume = volume
         self._H: float | None = None
+        self.silent = silent
         self.post_init()
 
     def post_init(self) -> None:
@@ -53,9 +55,10 @@ class MMAR:
         while len(self.divisors(m)) < 5:
             m -= 1
         if m != n:
-            print(
-                f"The series has been adjusted: the orginal size was {n}, the new size is {m} with {len(self.divisors(m))} dividers."
-            )
+            if not self.silent:
+                print(
+                    f"The series has been adjusted: the orginal size was {n}, the new size is {m} with {len(self.divisors(m))} dividers."
+                )
             self.price = self.price[-m:]
             self._log_prices = np.log(cast(np.ndarray, self.price.values))
         self.config()
@@ -461,20 +464,17 @@ class MMAR:
         self._H = 1 / zero
         return self._H
 
-    def get_params(self, K: int = 12) -> tuple[np.ndarray[float, Any], float]:
+    def get_params(self) -> tuple[np.ndarray[float, Any], float]:
         """Compute main parameters for the MMAR model
 
-        Args:
-            K (int, optional): _description_. Defaults to 12.
-
         Returns:
-            tuple[np.ndarray[float], float]: _description_
+            tuple[np.ndarray[float], float]: Theta values, returns volatility
         """
         alpha = np.arange(0.001, 1.101, 0.001)
         spectr = np.array([self.legendre(x, self.q, self.tau) for x in alpha])
         self._m = alpha[np.where(spectr < 0.99)[-1][-1]]
         b = 2
-
+        K = int(np.log2(len(self.price)))
         self._mu = self._m / self.H
         self._sigma = np.sqrt((2 * (self.mu - 1)) / np.log(b))
 
@@ -528,6 +528,11 @@ class MMAR:
 
             \\text{mul } = \\sqrt {b^k \\cdot \\theta_{k}(t)} \\cdot \\sigma
 
+        .. note::
+            When the length of the simulation *n* is different than that of Theta, we should decide what values to use.
+            In this case we decided to use the last values `theta[-n:]`, but maybe a random selection might be preferable.
+            Something like `np.random.choice(theta, size=n, replace=False)`.
+
         Returns:
             np.ndarray[float, Any]: simulated data
         """
@@ -535,7 +540,7 @@ class MMAR:
         theta = self.theta
         k = int(np.log2(len(theta)))
         sigma_ret = self.sigma_ret
-        mul = np.sqrt(np.power(2, k) * theta[-n:]) * sigma_ret
+        mul = np.sqrt(np.power(b, k) * theta[-n:]) * sigma_ret
         p = self.compute_p(mul, S0, n, num_sim, seed)
         return p
 
