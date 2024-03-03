@@ -5,3 +5,8 @@ The computation of $\theta$ using Volumes is taken from a paper by Batten, Kinat
 
 ## Notes
 The class uses **Numba** to speed up the Monte Carlo Simulation, which remains a bottleneck in some situations. We aim to provide a GPU accelerated method in the future versions.
+
+## Authors:
+- Andrea Dalseno
+- Vsevolod Cherepanov
+- Sanchit Jain

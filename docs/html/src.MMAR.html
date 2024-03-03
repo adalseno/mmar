@@ -66,8 +66,10 @@
 <li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.get_scaling"><code class="docutils literal notranslate"><span class="pre">MMAR.get_scaling()</span></code></a></li>
 <li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.kpss_test"><code class="docutils literal notranslate"><span class="pre">MMAR.kpss_test()</span></code></a></li>
 <li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.legendre"><code class="docutils literal notranslate"><span class="pre">MMAR.legendre()</span></code></a></li>
+<li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.m"><code class="docutils literal notranslate"><span class="pre">MMAR.m</span></code></a></li>
 <li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.mu"><code class="docutils literal notranslate"><span class="pre">MMAR.mu</span></code></a></li>
 <li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.plot_alpha"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_alpha()</span></code></a></li>
+<li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.plot_alpha_theoretical"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_alpha_theoretical()</span></code></a></li>
 <li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.plot_density"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_density()</span></code></a></li>
 <li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.plot_qq"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_qq()</span></code></a></li>
 <li><a class="reference internal" href="#src.MMAR.MMAR.MMAR.plot_scaling"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_scaling()</span></code></a></li>
@@ -125,14 +127,14 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.H">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">H</span></span><a class="headerlink" href="#src.MMAR.MMAR.MMAR.H" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">H</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.H" title="Link to this definition"></a></dt>
+<dd><p>The Hurst exponent</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>the Hurst exponent</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>_type_</p>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -140,16 +142,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.adf_test">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">adf_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeseries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.adf_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.adf_test" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Augmented Dickey-Fuller test
+Wrapper aorund statsmodels.tsa.stattools.adfuller</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>timeseries</strong> (<em>pd.Series</em><em> | </em><em>np.ndarray</em>) – _description_</p></li>
-<li><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – _description_. Defaults to 0.05.</p></li>
+<li><p><strong>timeseries</strong> (<em>pd.Series</em><em> | </em><em>np.ndarray</em>) – the series to analyze</p></li>
+<li><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – confidence level for p-value. Defaults to 0.05.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>_description_</p>
+<dd class="field-even"><p>the series is strict stationary</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -160,10 +163,12 @@
 <dl class="py property">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.alpha_min">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alpha_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.alpha_min" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Alpha zero</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{0}\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>alpha zero</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
@@ -174,12 +179,12 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.check_autocorrelation">
 <span class="sig-name descname"><span class="pre">check_autocorrelation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.check_autocorrelation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.check_autocorrelation" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Test series for autocorrelation</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – _description_. Defaults to 0.05.</p></li>
-<li><p><strong>lags</strong> (<em>int</em><em>, </em><em>optional</em>) – _description_. Defaults to 10.</p></li>
+<li><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – confidence level. Defaults to 0.05.</p></li>
+<li><p><strong>lags</strong> (<em>int</em><em>, </em><em>optional</em>) – umber of lags to consider. Defaults to 10.</p></li>
 </ul>
 </dd>
 </dl>
@@ -188,13 +193,10 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.check_hurst">
 <span class="sig-name descname"><span class="pre">check_hurst</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.check_hurst"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.check_hurst" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Check Hurst exponent</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>_type_</p>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -202,10 +204,10 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.check_normality">
 <span class="sig-name descname"><span class="pre">check_normality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.check_normality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.check_normality" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Test distribution for Normality assumption</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – _description_. Defaults to 0.05.</p>
+<dd class="field-odd"><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – confidence level. Defaults to 0.05.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -213,39 +215,55 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.check_stationarity">
 <span class="sig-name descname"><span class="pre">check_stationarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.check_stationarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.check_stationarity" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Check if the series is stationary</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – _description_. Defaults to 0.05.</p>
+<dd class="field-odd"><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – confidence level. Defaults to 0.05.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>_description_</p>
+</dl>
+<dl>
+<dt>See [statsmodels](<a class="reference external" href="https://www.statsmodels.org/dev/examples/notebooks/generated/stationarity_detrending_adf_kpss.html">https://www.statsmodels.org/dev/examples/notebooks/generated/stationarity_detrending_adf_kpss.html</a>):</dt><dd><p>Case 1: Both tests conclude that the series is not stationary - The series is not stationary
+Case 2: Both tests conclude that the series is stationary - The series is stationary
+Case 3: KPSS indicates stationarity and ADF indicates non-stationarity - The series is trend stationary.</p>
+<blockquote>
+<div><p>Trend needs to be removed to make series strict stationary. The detrended series is checked for stationarity.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Case 4: KPSS indicates non-stationarity and ADF indicates stationarity - The series is difference stationary.</dt><dd><p>Differencing is to be used to make series stationary. The differenced series is checked for stationarity.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_type_</p>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.compute_p">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mul</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1968</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.compute_p"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.compute_p" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mul</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1968</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.compute_p"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.compute_p" title="Link to this definition"></a></dt>
+<dd><p>Compute geometric MMAR using Numba</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mul</strong> (<em>np.ndarray</em><em>[</em><em>float</em><em>]</em>) – _description_</p></li>
-<li><p><strong>S0</strong> (<em>float</em>) – _description_</p></li>
-<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – _description_. Defaults to 30.</p></li>
-<li><p><strong>num_sim</strong> (<em>int</em><em>, </em><em>optional</em>) – _description_. Defaults to 10_000.</p></li>
-<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – _description_. Defaults to 1968.</p></li>
+<li><p><strong>S0</strong> (<em>float</em>) – initial price</p></li>
+<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – number of steps. Defaults to 30.</p></li>
+<li><p><strong>num_sim</strong> (<em>int</em><em>, </em><em>optional</em>) – number of simulations. Defaults to 10_000.</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – seed. Defaults to 1968.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>_description_</p>
+</dl>
+<div class="math notranslate nohighlight">
+\[S(t) = S_{0} e^{B_{H}[\theta(t)]}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the simulated MMAR series</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.ndarray[float]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray[float]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -253,19 +271,19 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.config">
 <span class="sig-name descname"><span class="pre">config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.config" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Run main fucntions for complete class configuration</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.divisors">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">divisors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.divisors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.divisors" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">divisors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.divisors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.divisors" title="Link to this definition"></a></dt>
+<dd><p>Compute divisors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – _description_</p>
+<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – number to compute divisors</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>_description_</p>
+<dd class="field-even"><p>divisors</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray[int]</p>
@@ -275,19 +293,43 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.get_MMAR_MC">
-<span class="sig-name descname"><span class="pre">get_MMAR_MC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1968</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_MMAR_MC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_MMAR_MC" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_MMAR_MC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1968</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_MMAR_MC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_MMAR_MC" title="Link to this definition"></a></dt>
+<dd><p>Monte Carlo simulation accordig to MMAR model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S0</strong> (<em>float</em>) – initial price</p></li>
+<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – number of steps. Defaults to 30.</p></li>
+<li><p><strong>num_sim</strong> (<em>int</em><em>, </em><em>optional</em>) – number of simulations. Defaults to 10_000.</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – seed. Defaults to 1968.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}X(t,1) = \underbrace {\sqrt {b^k \cdot \theta_{k}(t)}}_{\sigma(t)} \cdot \sigma \cdot [B_{H}(t) -B_{H}(t-1)]\\\text{mul } = \sqrt {b^k \cdot \theta_{k}(t)} \cdot \sigma\end{aligned}\end{align} \]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>simulated data</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray[float, Any]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.get_alpha_min">
 <span class="sig-name descname"><span class="pre">get_alpha_min</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_alpha_min"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_alpha_min" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Compute alpha zero
+The smallest alpha for which the multifractal spectrum is defined.</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{0} = \frac {\tau(1.0)-\tau(0.9999)}{q(1.0)-q(0.9999)}\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>alpha zero</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>_type_</p>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -295,10 +337,12 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.get_hurst">
 <span class="sig-name descname"><span class="pre">get_hurst</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_hurst"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_hurst" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Compute Hurst exponent</p>
+<div class="math notranslate nohighlight">
+\[H = \frac {1}{\tau(q) =0}\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>Hurst exponent</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
@@ -308,8 +352,8 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_params" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_params" title="Link to this definition"></a></dt>
+<dd><p>Compute main parameters for the MMAR model</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>K</strong> (<em>int</em><em>, </em><em>optional</em>) – _description_. Defaults to 12.</p>
@@ -325,11 +369,11 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.get_scaling">
-<span class="sig-name descname"><span class="pre">get_scaling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_scaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_scaling" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<span class="sig-name descname"><span class="pre">get_scaling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.get_scaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.get_scaling" title="Link to this definition"></a></dt>
+<dd><p>Compute scaling function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>Taus, Cs, qs</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple[np.ndarray[float], np.ndarray[float], np.ndarray[float]]</p>
@@ -340,16 +384,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.kpss_test">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kpss_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeseries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.kpss_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.kpss_test" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Kwiatkowski-Phillips-Schmidt-Shin test for stationarity
+Wrapper aorund statsmodels.tsa.stattools.kpss</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>timeseries</strong> (<em>pd.Series</em><em> | </em><em>np.ndarray</em>) – _description_</p></li>
-<li><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – _description_. Defaults to 0.05.</p></li>
+<li><p><strong>timeseries</strong> (<em>pd.Series</em><em> | </em><em>np.ndarray</em>) – the series to analyze</p></li>
+<li><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – confidence level for p-value. Defaults to 0.05.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>_description_</p>
+<dd class="field-even"><p>the series is NOT trend stationary</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -359,19 +404,50 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.legendre">
-<span class="sig-name descname"><span class="pre">legendre</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.legendre"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.legendre" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">legendre</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.legendre"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.legendre" title="Link to this definition"></a></dt>
+<dd><p>Compute Legendre transformation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>alpha</strong> (<em>float</em>) – estimation point</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>transformed value</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.m">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.m" title="Link to this definition"></a></dt>
+<dd><p>M of alpha</p>
+<p>Is the first exponent that makes the multifractal spectrum = 1</p>
+<div class="math notranslate nohighlight">
+\[m_{\alpha}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>m of alpha</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.mu">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mu</span></span><a class="headerlink" href="#src.MMAR.MMAR.MMAR.mu" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mu</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.mu" title="Link to this definition"></a></dt>
+<dd><p>Mu of alpha</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\mu_{\alpha} = \frac {m_{\alpha}}{H}\\\textrm{where } f_{\theta}(\mu_{\alpha}) = 1\end{aligned}\end{align} \]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>Mu</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>_type_</p>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -379,13 +455,23 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.plot_alpha">
 <span class="sig-name descname"><span class="pre">plot_alpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.plot_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.plot_alpha" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Plot f(alpha)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>None</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>_type_</p>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.plot_alpha_theoretical">
+<span class="sig-name descname"><span class="pre">plot_alpha_theoretical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.plot_alpha_theoretical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.plot_alpha_theoretical" title="Link to this definition"></a></dt>
+<dd><p>Plot canonical f(alpha)</p>
+<div class="math notranslate nohighlight">
+\[f_X(\alpha) = 1 - \frac {(\alpha - m_{\alpha})^2} {4 \cdot H \cdot (m_{\alpha}-H)}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -393,34 +479,34 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.plot_density">
 <span class="sig-name descname"><span class="pre">plot_density</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.plot_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.plot_density" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Density plot</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.plot_qq">
 <span class="sig-name descname"><span class="pre">plot_qq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.plot_qq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.plot_qq" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>QQ plot</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.plot_scaling">
 <span class="sig-name descname"><span class="pre">plot_scaling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.plot_scaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.plot_scaling" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Plot the scaling function</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.post_init">
 <span class="sig-name descname"><span class="pre">post_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.post_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.post_init" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<dd><p>Post init function to init vars</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.q">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">q</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.q" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">q</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.q" title="Link to this definition"></a></dt>
+<dd><p>q values (exponents)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>qs</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
@@ -430,39 +516,13 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.sigma">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sigma</span></span><a class="headerlink" href="#src.MMAR.MMAR.MMAR.sigma" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sigma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.sigma" title="Link to this definition"></a></dt>
+<dd><p>Sigma of alpha</p>
+<div class="math notranslate nohighlight">
+\[\sigma_{\alpha} = \sqrt {\frac {2 (\mu_{\alpha}-1)} {\log(b)}}\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.sigma_ret">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sigma_ret</span></span><a class="headerlink" href="#src.MMAR.MMAR.MMAR.sigma_ret" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.tau">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tau</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.tau" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>Sigma of alpha</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
@@ -470,37 +530,68 @@
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.sigma_ret">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sigma_ret</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.sigma_ret" title="Link to this definition"></a></dt>
+<dd><p>Instant volatiltiy of returns</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>volatility of returns</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.tau">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tau</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.tau" title="Link to this definition"></a></dt>
+<dd><p>Tau values
+The value for the scaling function</p>
+<div class="math notranslate nohighlight">
+\[\tau(q)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Taus</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray[float, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.tauf">
-<span class="sig-name descname"><span class="pre">tauf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.tauf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.tauf" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<span class="sig-name descname"><span class="pre">tauf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/MMAR/MMAR.html#MMAR.tauf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.MMAR.MMAR.MMAR.tauf" title="Link to this definition"></a></dt>
+<dd><p>Return tau(x) via interpolation</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>q</strong> (<em>_type_</em>) – _description_</p></li>
-<li><p><strong>tau</strong> (<em>_type_</em>) – _description_</p></li>
-</ul>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – value for which compute tau</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>_description_</p>
+</dl>
+<div class="math notranslate nohighlight">
+\[\tau(x)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tau(x)</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.theta">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">theta</span></span><a class="headerlink" href="#src.MMAR.MMAR.MMAR.theta" title="Link to this definition"></a></dt>
-<dd><p>_summary_</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">theta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.theta" title="Link to this definition"></a></dt>
+<dd><p>Theta values</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>Thetas</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>_type_</p>
+<dd class="field-even"><p>np.ndarray[float, Any]</p>
 </dd>
 </dl>
 </dd></dl>

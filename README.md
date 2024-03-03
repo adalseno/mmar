@@ -8,54 +8,31 @@ Authors:
 
 The repo structure follows this post: https://khuyentran1401.github.io/reproducible-data-science/structure_project/introduction.html
 
-## Tools used in this project
-* [Poetry](https://towardsdatascience.com/how-to-effortlessly-publish-your-python-package-to-pypi-using-poetry-44b305362f9f): Dependency management - [article](https://mathdatasimplified.com/2023/06/12/poetry-a-better-way-to-manage-python-dependencies/)
-* [hydra](https://hydra.cc/): Manage configuration files - [article](https://mathdatasimplified.com/2023/05/25/stop-hard-coding-in-a-data-science-project-use-configuration-files-instead/)
-* [pre-commit plugins](https://pre-commit.com/): Automate code reviewing formatting
-* [DVC](https://dvc.org/): Data version control - [article](https://mathdatasimplified.com/2023/02/20/introduction-to-dvc-data-version-control-tool-for-machine-learning-projects-2/)
-* [pdoc](https://github.com/pdoc3/pdoc): Automatically create an API documentation for your project
+## Main directories with their use and content
 
-## Set up the environment
-1. Install [Poetry](https://python-poetry.org/docs/#installation)
-2. Set up the environment:
-```bash
-make env 
-```
+    ├── data: data files
+    │   ├── final
+    │   ├── processed
+    │   └── raw: Raw files are not included and must be downloaded from source
+    │       
+    ├── docs: Documentation for the MMAR class and utility functions
+    │   
+    ├── notebooks: the notebooks used in the project
+    ├── src: source files. In some cases contains local copies of packages available on [Pypi](https://pypi.org/) for compatibility reasons.
+    │   ├── MMAR: the MMAR class
+    └── tests: test files (at present not used)
 
-## Install dependencies
-To install all dependencies for this project, run:
-```bash
-poetry install
-```
 
-To install a new package, run:
-```bash
-poetry add <package-name>
-```
+The main purpose of this project is to provide a simple class to allow building a [Multifractal Model of Asset Returns](https://users.math.yale.edu/~bbm3/web_pdfs/Cowles1164.pdf) based on actual data.
 
-## Version your data
-To track changes to the "data" directory, type:
-```bash
-dvc add data
-```
+We used the class to compute the main parameters for the MMAR model and then used them to create a Monte Carlo simulation. We used the simulated data (based on SPY ETF) to improve option predictions using a basic trading strategy, which proved to be reasonably effective in out test-case:
+![Example strategy](other/strategy_example.png)
 
-This command will create the "data.dvc" file, which contains a unique identifier and the location of the data directory in the file system.
 
-To keep track of the data associated with a particular version, commit the "data.dvc" file to Git:
-```bash
-git add data.dvc
-git commit -m "add data"
-```
-
-To push the data to remote storage, type:
-```bash
-dvc push 
-```
-
-## Auto-generate API documentation
-
-To auto-generate API document for your project, run:
-
-```bash
-make docs
-```
+* For S&P500 ETF (SPY) data, we used [Yahoo Finance.](https://finance.yahoo.com/quote/SPY?.tsrc=fin-srch) 
+* For option chains data, we used [OptinosDX](https://www.optionsdx.com/).
+* For interest rates, we used [FRED](https://fred.stlouisfed.org/series/TB3MS).
+* [Alpha Avantage](https://www.alphavantage.co/documentation/) provides more granular data (not only daily but also intraday), but those data haven't been used in the final version.
+* dot files, such as *.env*, are clearly not uploaded to GitHub. You must create them locally with your API keys.
+* There are many notebooks in the experiments branch that were not included in the final version, but might be interesting to explore. However, that branch is serveral commit behind, so don't expect the notebooks to work without some manual fixes.
+* A basic documentation for the MMAR class, built using [Sphinx](https://www.sphinx-doc.org/en/master/), is available on GitHub Pages.

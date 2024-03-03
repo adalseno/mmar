@@ -47,15 +47,7 @@
 <li><a class="reference internal" href="#">src package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-src.process">src.process module</a><ul>
-<li><a class="reference internal" href="#src.process.process_data"><code class="docutils literal notranslate"><span class="pre">process_data()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-src.train_model">src.train_model module</a><ul>
-<li><a class="reference internal" href="#src.train_model.train_model"><code class="docutils literal notranslate"><span class="pre">train_model()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#src-utility-functions-module">src.utility_functions module</a><ul>
+<li><a class="reference internal" href="#module-src.utility_functions">src.utility_functions module</a><ul>
 <li><a class="reference internal" href="#src.utility_functions.backtest_strategy"><code class="docutils literal notranslate"><span class="pre">backtest_strategy()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.display_report"><code class="docutils literal notranslate"><span class="pre">display_report()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.objective_catboost"><code class="docutils literal notranslate"><span class="pre">objective_catboost()</span></code></a></li>
@@ -66,6 +58,7 @@
 <li><a class="reference internal" href="#src.utility_functions.plot_feature_imp"><code class="docutils literal notranslate"><span class="pre">plot_feature_imp()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.plot_strategy"><code class="docutils literal notranslate"><span class="pre">plot_strategy()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.select_threshold"><code class="docutils literal notranslate"><span class="pre">select_threshold()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.tune_params"><code class="docutils literal notranslate"><span class="pre">tune_params()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-src">Module contents</a></li>
@@ -103,52 +96,6 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="src.HurstIndexSolver.html">src.HurstIndexSolver package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#module-src.HurstIndexSolver.AddMethods">src.HurstIndexSolver.AddMethods module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods"><code class="docutils literal notranslate"><span class="pre">AddMethods</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.Divisors"><code class="docutils literal notranslate"><span class="pre">AddMethods.Divisors()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.FixedPointSolver"><code class="docutils literal notranslate"><span class="pre">AddMethods.FixedPointSolver()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.LocalMin"><code class="docutils literal notranslate"><span class="pre">AddMethods.LocalMin()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.OLE_linprog"><code class="docutils literal notranslate"><span class="pre">AddMethods.OLE_linprog()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.AddMethods.AddMethods.findOptN"><code class="docutils literal notranslate"><span class="pre">AddMethods.findOptN()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#module-src.HurstIndexSolver.HurstIndexSolver">src.HurstIndexSolver.HurstIndexSolver module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstAWC"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstAWC()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstAbsoluteMoments"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstAbsoluteMoments()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstAggregateVariance"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstAggregateVariance()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstClustering"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstClustering()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstDFAnalysis"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstDFAnalysis()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstGHE"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstGHE()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstHiguchi"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstHiguchi()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstKS"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstKS()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstLSSD"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstLSSD()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstLSV"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstLSV()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstLocalWhittle"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstLocalWhittle()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstPeriodogram"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstPeriodogram()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstRSAnalysis"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstRSAnalysis()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstRSAnalysis2"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstRSAnalysis2()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstRegrResid"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstRegrResid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstTA"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstTA()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstTTA"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstTTA()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.EstHurstVVL"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.EstHurstVVL()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.HurstIndexSolver.HurstIndexSolver.RS4Hurst"><code class="docutils literal notranslate"><span class="pre">HurstIndexSolver.RS4Hurst()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#module-src.HurstIndexSolver.fgn">src.HurstIndexSolver.fgn module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.fgn.autocovariance"><code class="docutils literal notranslate"><span class="pre">autocovariance()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="src.HurstIndexSolver.html#src.HurstIndexSolver.fgn.fgn"><code class="docutils literal notranslate"><span class="pre">fgn()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="src.HurstIndexSolver.html#module-src.HurstIndexSolver">Module contents</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="src.MMAR.html">src.MMAR package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="src.MMAR.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="src.MMAR.html#module-src.MMAR.MMAR">src.MMAR.MMAR module</a><ul>
@@ -170,8 +117,10 @@
 <li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.get_scaling"><code class="docutils literal notranslate"><span class="pre">MMAR.get_scaling()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.kpss_test"><code class="docutils literal notranslate"><span class="pre">MMAR.kpss_test()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.legendre"><code class="docutils literal notranslate"><span class="pre">MMAR.legendre()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.m"><code class="docutils literal notranslate"><span class="pre">MMAR.m</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.mu"><code class="docutils literal notranslate"><span class="pre">MMAR.mu</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.plot_alpha"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_alpha()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.plot_alpha_theoretical"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_alpha_theoretical()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.plot_density"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_density()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.plot_qq"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_qq()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="src.MMAR.html#src.MMAR.MMAR.MMAR.plot_scaling"><code class="docutils literal notranslate"><span class="pre">MMAR.plot_scaling()</span></code></a></li>
@@ -196,31 +145,9 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="module-src.process">
-<span id="src-process-module"></span><h2>src.process module<a class="headerlink" href="#module-src.process" title="Link to this heading"></a></h2>
-<p>This is the demo code that uses hydra to access the parameters in under the directory config.</p>
-<p>Author: Khuyen Tran</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="src.process.process_data">
-<span class="sig-prename descclassname"><span class="pre">src.process.</span></span><span class="sig-name descname"><span class="pre">process_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DictConfig</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/process.html#process_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.process.process_data" title="Link to this definition"></a></dt>
-<dd><p>Function to process the data</p>
-</dd></dl>
-
-</section>
-<section id="module-src.train_model">
-<span id="src-train-model-module"></span><h2>src.train_model module<a class="headerlink" href="#module-src.train_model" title="Link to this heading"></a></h2>
-<p>This is the demo code that uses hy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      dra to access the parameters in under the directory config.</p>
-<p>Author: Khuyen Tran</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="src.train_model.train_model">
-<span class="sig-prename descclassname"><span class="pre">src.train_model.</span></span><span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DictConfig</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/train_model.html#train_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.train_model.train_model" title="Link to this definition"></a></dt>
-<dd><p>Function to train the model</p>
-</dd></dl>
-
-</section>
-<section id="src-utility-functions-module">
-<h2>src.utility_functions module<a class="headerlink" href="#src-utility-functions-module" title="Link to this heading"></a></h2>
-<p id="module-src.utility_functions">Helper functions</p>
+<section id="module-src.utility_functions">
+<span id="src-utility-functions-module"></span><h2>src.utility_functions module<a class="headerlink" href="#module-src.utility_functions" title="Link to this heading"></a></h2>
+<p>Helper functions</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src.utility_functions.backtest_strategy">
 <span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">backtest_strategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ml_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#backtest_strategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.backtest_strategy" title="Link to this definition"></a></dt>
@@ -245,7 +172,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src.utility_functions.display_report">
-<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">display_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#display_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.display_report" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">display_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#display_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.display_report" title="Link to this definition"></a></dt>
 <dd><p>Display classification report and confusion matrix</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -253,6 +180,12 @@
 <li><p><strong>y_test</strong> (<em>np.ndarray</em>) – true values</p></li>
 <li><p><strong>predictions</strong> (<em>np.ndarray</em>) – predicted values</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>true negative, false positive, false negative, true positive</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[float,float,float,float]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -282,7 +215,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src.utility_functions.objective_lightgbm">
-<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">objective_lightgbm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#objective_lightgbm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.objective_lightgbm" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">objective_lightgbm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1968</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#objective_lightgbm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.objective_lightgbm" title="Link to this definition"></a></dt>
 <dd><p>Objective function for LightGBM</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -291,7 +224,10 @@
 <li><p><strong>X_train</strong> (<em>pd.DataFrame</em>) – train set</p></li>
 <li><p><strong>y_train</strong> (<em>np.ndarray</em>) – target</p></li>
 <li><p><strong>metric</strong> (<em>str</em>) – the metric used</p></li>
-<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – number of splits in the CV. Defaults to 5.</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – number of splits in the CV. Defaults to 5</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – seed for Kfold. Default to 1968</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – maximun number of iterations, to prevent overfitting. Default to 35</p></li>
+<li><p><strong>max_dep</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum depth, to prevent overfitting. Default to 12</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -418,6 +354,31 @@
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.tune_params">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">tune_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#tune_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.tune_params" title="Link to this definition"></a></dt>
+<dd><p>Tune hyperparameters using Otuna</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_train</strong> (<em>pd.DataFrame</em>) – Train set</p></li>
+<li><p><strong>y_train</strong> (<em>np.ndarray</em>) – train labels</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – metric to use</p></li>
+<li><p><strong>timeout</strong> (<em>int</em>) – timeout</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – maximun number of iterations, to prevent overfitting. Default to 35</p></li>
+<li><p><strong>max_dep</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum depth, to prevent overfitting. Default to 12</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – number of splits in Kfold. Default to 5</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuned parameters</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>

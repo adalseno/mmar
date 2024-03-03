@@ -1,52 +1,53 @@
-from scipy.optimize import minimize_scalar
-import numpy as np
+from typing import Any, cast
+
 import matplotlib.pyplot as plt
-from scipy.stats import norm, zscore, jarque_bera
-from scipy.optimize import root_scalar
-from numpy.random import normal
+import numpy as np
 import pandas as pd
-from statsmodels.tsa.stattools import adfuller, kpss
 import statsmodels.api as sm
 from numba import njit, prange
-
+from numpy.random import normal
+from scipy.optimize import minimize_scalar, root_scalar
+from scipy.stats import jarque_bera, norm, zscore
+from statsmodels.tsa.stattools import adfuller, kpss
 
 
 class MMAR:
     def __init__(
         self, price: pd.Series, seed: int = 42, volume: pd.Series | None = None
-    )->None:
-        """_summary_
+    ) -> None:
+        """Class to build a MMAR model starting from actual data
 
         Args:
-            price (pd.Series): _description_
-            seed (int, optional): _description_. Defaults to 42.
-            volume (pd.Series | None, optional): _description_. Defaults to None.
+            price (pd.Series): price series
+            seed (int, optional): seed. Defaults to 42.
+            volume (pd.Series | None, optional): volume series. Defaults to None.
 
         Returns:
-            None: _description_
+            None
         """
         self.price = price
-        self._log_prices = np.log(price.values)
-        self._theta = None
-        self._m = None
-        self._sigma = None
-        self._sigma_ret = None
-        self._mu = None
-        self._q = None
-        self._c = None
-        self._tau = None
-        self._alpha_min = None
-        self.seed = seed
+        self._log_prices: np.ndarray[float, Any] = np.log(
+            cast(np.ndarray, price.values)
+        )
+        self._theta: np.ndarray[float, Any] | None = None
+        self._m: float | None = None
+        self._sigma: float | None = None
+        self._sigma_ret: float | None = None
+        self._mu: float | None = None
+        self._q: np.ndarray[float, Any] | None = None
+        self._c: np.ndarray[float, Any] | None = None
+        self._tau: np.ndarray[float, Any] | None = None
+        self._alpha_min: float | None = None
+        self.seed: int = seed
         if volume is not None:
             self._volume = volume.values
         else:
             self._volume = volume
-        self._H = None
+        self._H: float | None = None
         self.post_init()
 
-    def post_init(self)->None:
-        """_summary_
-        """
+    def post_init(self) -> None:
+        """Post init function to init vars"""
         n = len(self.price)
         m = n
         while len(self.divisors(m)) < 5:
@@ -56,92 +57,128 @@ class MMAR:
                 f"The series has been adjusted: the orginal size was {n}, the new size is {m} with {len(self.divisors(m))} dividers."
             )
             self.price = self.price[-m:]
-            self._log_prices = np.log(self.price.values)
+            self._log_prices = np.log(cast(np.ndarray, self.price.values))
+        self.config()
 
     # Properties
     @property
-    def theta(self):
-        """_summary_
+    def theta(self) -> np.ndarray[float, Any]:
+        """Theta values
 
         Returns:
-            _type_: _description_
+            np.ndarray[float, Any]: Thetas
         """
         return self._theta
 
     @property
-    def H(self):
-        """_summary_
+    def H(self) -> float:
+        """The Hurst exponent
 
         Returns:
-            _type_: _description_
+            float: the Hurst exponent
         """
         return self._H
 
     @property
-    def mu(self):
-        """_summary_
+    def mu(self) -> float:
+        """Mu of alpha
+
+        .. math::
+
+            \\mu_{\\alpha} = \\frac {m_{\\alpha}}{H}
+
+            \\textrm{where } f_{\\theta}(\\mu_{\\alpha}) = 1
+
 
         Returns:
-            _type_: _description_
+            float: Mu
         """
         return self._mu
 
     @property
-    def sigma(self):
-        """_summary_
+    def m(self) -> float:
+        """M of alpha
+
+        Is the first exponent that makes the multifractal spectrum = 1
+
+        .. math::
+
+            m_{\\alpha}
 
         Returns:
-            _type_: _description_
+            float: m of alpha
+        """
+        return self._m
+
+    @property
+    def sigma(self) -> float:
+        """Sigma of alpha
+
+        .. math::
+
+            \\sigma_{\\alpha} = \\sqrt {\\frac {2 (\\mu_{\\alpha}-1)} {\\log(b)}}
+
+        Returns:
+            float: Sigma of alpha
         """
         return self._sigma
 
     @property
-    def sigma_ret(self):
-        """_summary_
+    def sigma_ret(self) -> float:
+        """Instant volatiltiy of returns
 
         Returns:
-            _type_: _description_
+            float: volatility of returns
         """
         return self._sigma_ret
 
     @property
-    def alpha_min(self)->float:
-        """_summary_
+    def alpha_min(self) -> float:
+        """Alpha zero
+
+        .. math::
+
+            \\alpha_{0}
 
         Returns:
-            float: _description_
+            float: alpha zero
         """
         return self._alpha_min
 
     @property
-    def tau(self)->float:
-        """_summary_
+    def tau(self) -> np.ndarray[float, Any]:
+        """Tau values
+        The value for the scaling function
+
+        .. math::
+
+            \\tau(q)
 
         Returns:
-            float: _description_
+            np.ndarray[float, Any]: Taus
         """
         return self._tau
 
     @property
-    def q(self)->float:
-        """_summary_
+    def q(self) -> np.ndarray[float, Any]:
+        """q values (exponents)
 
         Returns:
-            float: _description_
+            float: qs
         """
         return self._q
 
     # Statich methods
 
     @staticmethod
-    def divisors(n:int)->np.ndarray[int]:
-        """_summary_
+    def divisors(n: int) -> np.ndarray[int, Any]:
+        """Compute divisors
 
         Args:
-            n (int): _description_
+            n (int): number to compute divisors
 
         Returns:
-            np.ndarray[int]: _description_
+            np.ndarray[int]: divisors
         """
         divs = [1]
         for i in range(2, int(np.sqrt(n)) + 1):
@@ -151,15 +188,16 @@ class MMAR:
         return np.array(sorted(list(set(divs))))[:-2]
 
     @staticmethod
-    def adf_test(timeseries:pd.Series|np.ndarray, conf_level: float = 0.05)->bool:
-        """_summary_
+    def adf_test(timeseries: pd.Series | np.ndarray, conf_level: float = 0.05) -> bool:
+        """Augmented Dickey-Fuller test
+        Wrapper aorund statsmodels.tsa.stattools.adfuller
 
         Args:
-            timeseries (pd.Series | np.ndarray): _description_
-            conf_level (float, optional): _description_. Defaults to 0.05.
+            timeseries (pd.Series | np.ndarray): the series to analyze
+            conf_level (float, optional): confidence level for p-value. Defaults to 0.05.
 
         Returns:
-            bool: _description_
+            bool:  the series is strict stationary
         """
         print("Results of Dickey-Fuller Test:")
         test = adfuller(timeseries, autolag="AIC")
@@ -178,15 +216,16 @@ class MMAR:
         return output["p-value"] < conf_level
 
     @staticmethod
-    def kpss_test(timeseries:pd.Series|np.ndarray, conf_level: float = 0.05)->bool:
-        """_summary_
+    def kpss_test(timeseries: pd.Series | np.ndarray, conf_level: float = 0.05) -> bool:
+        """Kwiatkowski-Phillips-Schmidt-Shin test for stationarity
+        Wrapper aorund statsmodels.tsa.stattools.kpss
 
         Args:
-            timeseries (pd.Series | np.ndarray): _description_
-            conf_level (float, optional): _description_. Defaults to 0.05.
+            timeseries (pd.Series | np.ndarray): the series to analyze
+            conf_level (float, optional): confidence level for p-value. Defaults to 0.05.
 
         Returns:
-            bool: _description_
+            bool: the series is NOT trend stationary
         """
         print("Results of KPSS Test:")
         test = kpss(timeseries, regression="c", nlags="auto")
@@ -195,43 +234,57 @@ class MMAR:
             output["Critical Value (%s)" % key] = value
         print(output)
         return output["p-value"] < conf_level
-    
+
     @staticmethod
     @njit(cache=True, parallel=True, fastmath=True)
-    def compute_p(mul:np.ndarray[float], S0: float, n: int = 30, num_sim: int = 10_000,  seed: int = 1968)->np.ndarray[float]:
-        """_summary_
+    def compute_p(
+        mul: np.ndarray[float, Any],
+        S0: float,
+        n: int = 30,
+        num_sim: int = 10_000,
+        seed: int = 1968,
+    ) -> np.ndarray[float, Any]:
+        """Compute geometric MMAR using Numba
 
         Args:
             mul (np.ndarray[float]): _description_
-            S0 (float): _description_
-            n (int, optional): _description_. Defaults to 30.
-            num_sim (int, optional): _description_. Defaults to 10_000.
-            seed (int, optional): _description_. Defaults to 1968.
+            S0 (float): initial price
+            n (int, optional): number of steps. Defaults to 30.
+            num_sim (int, optional): number of simulations. Defaults to 10_000.
+            seed (int, optional): seed. Defaults to 1968.
 
+        .. math::
+
+            S(t) = S_{0} e^{B_{H}[\\theta(t)]}
         Returns:
-            np.ndarray[float]: _description_
+            np.ndarray[float]: the simulated MMAR series
         """
         np.random.seed(seed)
         y = normal(loc=0, scale=1, size=(n, num_sim)).T
         x = np.empty(y.shape)
         for i in prange(x.shape[0]):
-            x[i] = np.cumsum(
-                    mul
-                    * y[i]
-                )
+            x[i] = np.cumsum(mul * y[i])
         p = S0 * np.exp(x)
         return p
 
     # Utility methods
 
-    def check_stationarity(self, conf_level: float = 0.05)->None:
-        """_summary_
+    def check_stationarity(self, conf_level: float = 0.05) -> None:
+        """Check if the series is stationary
 
         Args:
-            conf_level (float, optional): _description_. Defaults to 0.05.
+            conf_level (float, optional): confidence level. Defaults to 0.05.
+
+        See [statsmodels](https://www.statsmodels.org/dev/examples/notebooks/generated/stationarity_detrending_adf_kpss.html):
+            Case 1: Both tests conclude that the series is not stationary - The series is not stationary
+            Case 2: Both tests conclude that the series is stationary - The series is stationary
+            Case 3: KPSS indicates stationarity and ADF indicates non-stationarity - The series is trend stationary.
+                    Trend needs to be removed to make series strict stationary. The detrended series is checked for stationarity.
+            Case 4: KPSS indicates non-stationarity and ADF indicates stationarity - The series is difference stationary.
+                    Differencing is to be used to make series stationary. The differenced series is checked for stationarity.
 
         Returns:
-            _type_: _description_
+            None
         """
         timeseries = np.diff(self._log_prices)
         adf = self.adf_test(timeseries, conf_level)
@@ -252,11 +305,11 @@ class MMAR:
                 print("The time series is rend stationary")
         return None
 
-    def check_normality(self, conf_level: float = 0.05)->None:
-        """_summary_
+    def check_normality(self, conf_level: float = 0.05) -> None:
+        """Test distribution for Normality assumption
 
         Args:
-            conf_level (float, optional): _description_. Defaults to 0.05.
+            conf_level (float, optional): confidence level. Defaults to 0.05.
         """
         timeseries = np.diff(self._log_prices)
         test = jarque_bera(timeseries)
@@ -266,16 +319,16 @@ class MMAR:
             print("The time series is Normal distributed")
         return
 
-    def check_autocorrelation(self, conf_level: float = 0.05, lags: int = 10)->None:
-        """_summary_
+    def check_autocorrelation(self, conf_level: float = 0.05, lags: int = 10) -> None:
+        """Test series for autocorrelation
 
         Args:
-            conf_level (float, optional): _description_. Defaults to 0.05.
-            lags (int, optional): _description_. Defaults to 10.
+            conf_level (float, optional): confidence level. Defaults to 0.05.
+            lags (int, optional): umber of lags to consider. Defaults to 10.
         """
         timeseries = np.diff(self._log_prices)
         test = sm.stats.acorr_ljungbox(timeseries, lags=[lags])
-        if test.loc[lags, "lb_pvalue"] < conf_level:
+        if cast(float, test.loc[lags, "lb_pvalue"]) < conf_level:
             print(
                 "The time series is not independently distributed and has serial auto-correlation"
             )
@@ -283,32 +336,43 @@ class MMAR:
             print("The time series is independently distributed")
         return
 
-    def tauf(self, x, q, tau)->float:
-        """_summary_
+    def tauf(self, x: float) -> float:
+        """Return tau(x) via interpolation
 
         Args:
-            x (_type_): _description_
-            q (_type_): _description_
-            tau (_type_): _description_
+            x (float): value for which compute tau
+
+        .. math::
+
+            \\tau(x)
 
         Returns:
-            float: _description_
+            float: tau(x)
         """
-        return np.interp(x, xp=q, fp=tau)
+        return np.interp(x, xp=self.q, fp=self.tau)
 
-    def legendre(self, alpha, q, tau):
-        def F(x):
-            return alpha * x - self.tauf(x, q, tau)
+    def legendre(self, alpha: float) -> float:
+        """Compute Legendre transformation
 
-        res = minimize_scalar(F, bounds=(q[0], q[-1]))
-        xs = res.x
-        return alpha * xs - self.tauf(xs, q, tau)
-
-    def check_hurst(self)->None:
-        """_summary_
+        Args:
+            alpha (float): estimation point
 
         Returns:
-            _type_: _description_
+            float: transformed value
+        """
+
+        def F(x):
+            return alpha * x - self.tauf(x)
+
+        res = minimize_scalar(F, bounds=(self.q[0], self.q[-1]))
+        xs = res.x
+        return alpha * xs - self.tauf(xs)
+
+    def check_hurst(self) -> None:
+        """Check Hurst exponent
+
+        Returns:
+            None
         """
         if self.q is None:
             self.get_scaling()
@@ -320,11 +384,16 @@ class MMAR:
 
     # MMAR methods
 
-    def get_alpha_min(self)->float:
-        """_summary_
+    def get_alpha_min(self) -> float:
+        """Compute alpha zero
+        The smallest alpha for which the multifractal spectrum is defined.
+
+        .. math::
+
+            \\alpha_{0} = \\frac {\\tau(1.0)-\\tau(0.9999)}{q(1.0)-q(0.9999)}
 
         Returns:
-            _type_: _description_
+            float: alpha zero
         """
         q = np.array([100, 99.99])
         tau = np.zeros_like(q)
@@ -346,11 +415,13 @@ class MMAR:
         self._alpha_min = (tau[0] - tau[1]) / (q[0] - q[1])
         return self._alpha_min
 
-    def get_scaling(self)->tuple[np.ndarray[float], np.ndarray[float], np.ndarray[float]]:
-        """_summary_
+    def get_scaling(
+        self,
+    ) -> tuple[np.ndarray[float, Any], np.ndarray[float, Any], np.ndarray[float, Any]]:
+        """Compute scaling function
 
         Returns:
-            tuple[np.ndarray[float], np.ndarray[float], np.ndarray[float]]: _description_
+            tuple[np.ndarray[float], np.ndarray[float], np.ndarray[float]]: Taus, Cs, qs
         """
         q = np.linspace(0.01, 10.01, 1_000)
         tau = np.zeros_like(q)
@@ -376,18 +447,22 @@ class MMAR:
         self._c = np.concatenate(([1], c))
         return self._tau, self._c, self._q
 
-    def get_hurst(self)->float:
-        """_summary_
+    def get_hurst(self) -> float:
+        """Compute Hurst exponent
+
+        .. math::
+
+            H = \\frac {1}{\\tau(q) =0}
 
         Returns:
-            float: _description_
+            float: Hurst exponent
         """
-        zero = root_scalar(self.tauf, args=(self.q, self.tau), bracket=[0.1, 4.9]).root
+        zero = root_scalar(self.tauf, bracket=[0.1, 4.9]).root
         self._H = 1 / zero
         return self._H
 
-    def get_params(self, K: int = 12)-> tuple[np.ndarray[float], float]:
-        """_summary_
+    def get_params(self, K: int = 12) -> tuple[np.ndarray[float, Any], float]:
+        """Compute main parameters for the MMAR model
 
         Args:
             K (int, optional): _description_. Defaults to 12.
@@ -426,9 +501,8 @@ class MMAR:
 
         return self._theta, self._sigma_ret
 
-    def config(self)-> None:
-        """_summary_
-        """
+    def config(self) -> None:
+        """Run main fucntions for complete class configuration"""
         if self._alpha_min is None:
             self.get_alpha_min()
         if self._q is None:
@@ -438,26 +512,38 @@ class MMAR:
         if self._m is None:
             self.get_params()
 
-    
-    
     def get_MMAR_MC(
         self, S0: float, n: int = 30, num_sim: int = 10_000, seed: int = 1968
-    ) -> np.ndarray:
-        self.config()
+    ) -> np.ndarray[float, Any]:
+        """Monte Carlo simulation accordig to MMAR model
+
+        Args:
+            S0 (float): initial price
+            n (int, optional): number of steps. Defaults to 30.
+            num_sim (int, optional): number of simulations. Defaults to 10_000.
+            seed (int, optional): seed. Defaults to 1968.
+
+        .. math::
+            X(t,1) = \\underbrace {\\sqrt {b^k \\cdot \\theta_{k}(t)}}_{\\sigma(t)} \\cdot \\sigma \\cdot [B_{H}(t) -B_{H}(t-1)]
+
+            \\text{mul } = \\sqrt {b^k \\cdot \\theta_{k}(t)} \\cdot \\sigma
+
+        Returns:
+            np.ndarray[float, Any]: simulated data
+        """
         b = 2
         theta = self.theta
         k = int(np.log2(len(theta)))
         sigma_ret = self.sigma_ret
-        mul = np.sqrt(np.power(2,k) * theta[-n:])* sigma_ret
+        mul = np.sqrt(np.power(2, k) * theta[-n:]) * sigma_ret
         p = self.compute_p(mul, S0, n, num_sim, seed)
         return p
 
     # Plot methods
 
-    def plot_scaling(self)->None:
-        """_summary_
-        """
-        self.config()
+    def plot_scaling(self) -> None:
+        """Plot the scaling function"""
+
         hypothetical_tau = 0.5 * self._q - 1
         fig, ax = plt.subplots(1, 2, figsize=(18, 6))
         ax[0].plot(
@@ -489,9 +575,8 @@ class MMAR:
         plt.show()
         return
 
-    def plot_qq(self)->None:
-        """_summary_
-        """
+    def plot_qq(self) -> None:
+        """QQ plot"""
         # Standardize returns
         ret_sd = zscore(self._log_prices)
         # QQ plot
@@ -516,13 +601,44 @@ class MMAR:
         plt.show()
         return
 
-    def plot_alpha(self)->None:
-        """_summary_
+    def plot_alpha(self) -> None:
+        """Plot f(alpha)
 
         Returns:
-            _type_: _description_
+            None
         """
-        self.config()
+
+        def f(x: float) -> float:
+            """legendre transform
+
+            Args:
+                x (float): evaluation point
+
+            Returns:
+                float: transformed value
+            """
+            return np.min(x * self.q - self.tau)
+
+        alpha = np.linspace(0.0, 1.0, num=len(self.q))
+        ff = np.array([f(x) for x in alpha])
+        plt.figure(figsize=(8, 8))
+        plt.plot(alpha, ff, color="darkturquoise", linewidth=2, label=r"$f(\alpha)$")
+        plt.grid(True)
+        plt.xlabel(r"$\alpha$")
+        plt.ylabel(r"$f(\alpha)$")
+        plt.legend()
+        plt.show()
+        return
+
+    def plot_alpha_theoretical(self) -> None:
+        """Plot canonical f(alpha)
+
+        .. math::
+            f_X(\\alpha) = 1 - \\frac {(\\alpha - m_{\\alpha})^2} {4 \cdot H \cdot (m_{\\alpha}-H)}
+
+        Returns:
+            None
+        """
 
         m = self._m
         H = self.H
@@ -533,7 +649,20 @@ class MMAR:
 
         ff = np.array([f(x) for x in alpha])
 
-        plt.plot(alpha, ff, color="darkturquoise", linewidth=2, label="f")
+        spectrum = np.array(
+            [self.legendre(alpha_val) + self.tauf(alpha_val) for alpha_val in alpha]
+        )
+
+        plt.figure(figsize=(8, 8))
+        plt.plot(alpha, ff, color="darkturquoise", linewidth=2, label=r"$f(\alpha)$")
+        plt.plot(
+            alpha,
+            spectrum,
+            marker="o",
+            markerfacecolor="none",
+            label="Theoretical path",
+            linewidth=0,
+        )
         plt.grid(True)
         plt.xlabel(r"$\alpha$")
         plt.ylabel(r"$f(\alpha)$")
@@ -542,8 +671,7 @@ class MMAR:
         return
 
     def plot_density(self) -> None:
-        """_summary_
-        """
+        """Density plot"""
         ret = np.diff(self._log_prices)
 
         # Standardize returns
