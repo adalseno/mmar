@@ -71,6 +71,7 @@ class MMAR:
         Returns:
             np.ndarray[float, Any]: Thetas
         """
+        assert self._theta is not None
         return self._theta
 
     @property
@@ -80,6 +81,7 @@ class MMAR:
         Returns:
             float: the Hurst exponent
         """
+        assert self._H is not None
         return self._H
 
     @property
@@ -92,10 +94,12 @@ class MMAR:
 
             \\textrm{where } f_{\\theta}(\\mu_{\\alpha}) = 1
 
-
+        .. note::
+            It's also called :math:`\\lambda`
         Returns:
             float: Mu
         """
+        assert self._mu is not None
         return self._mu
 
     @property
@@ -108,9 +112,13 @@ class MMAR:
 
             m_{\\alpha}
 
+        .. note::
+            It's also called :math:`\\alpha_{0}`
+
         Returns:
             float: m of alpha
         """
+        assert self._m is not None
         return self._m
 
     @property
@@ -124,6 +132,7 @@ class MMAR:
         Returns:
             float: Sigma of alpha
         """
+        assert self._sigma is not None
         return self._sigma
 
     @property
@@ -133,19 +142,19 @@ class MMAR:
         Returns:
             float: volatility of returns
         """
+        assert self._sigma_ret is not None
         return self._sigma_ret
 
     @property
     def alpha_min(self) -> float:
-        """Alpha zero
+        """Alpha min
 
-        .. math::
-
-            \\alpha_{0}
+        The minimum allowable value for alpha
 
         Returns:
-            float: alpha zero
+            float: alpha min
         """
+        assert self._alpha_min is not None
         return self._alpha_min
 
     @property
@@ -160,6 +169,7 @@ class MMAR:
         Returns:
             np.ndarray[float, Any]: Taus
         """
+        assert self._tau is not None
         return self._tau
 
     @property
@@ -169,6 +179,7 @@ class MMAR:
         Returns:
             float: qs
         """
+        assert self._q is not None
         return self._q
 
     # Statich methods
@@ -180,6 +191,13 @@ class MMAR:
         Args:
             n (int): number to compute divisors
 
+        .. note::
+            The choice for the scale factor is arbitrary and different scales will give different outcomes.
+            Using the divisors is *time agnostic**.
+            An alternative might be to choose a different range of scales according to the time horizon of the series.
+            E.g., for daily data: `[1, 5, 10, 15, 21, 63, 126, 252]`,
+            that is daily, weekly, bi-weekly, three-weekly, month, quarter, half-year, year.
+
         Returns:
             np.ndarray[int]: divisors
         """
@@ -188,7 +206,7 @@ class MMAR:
             if n % i == 0:
                 divs.extend([i, int(n / i)])
         divs.extend([n])
-        return np.array(sorted(list(set(divs))))[:-2]
+        return np.array(sorted(set(divs)))[:-2]
 
     @staticmethod
     def adf_test(timeseries: pd.Series | np.ndarray, conf_level: float = 0.05) -> bool:
@@ -213,7 +231,7 @@ class MMAR:
                 "Number of Observations Used",
             ],
         )
-        for key, value in test[4].items():
+        for key, value in test[4].items(): # type: ignore
             output["Critical Value (%s)" % key] = value
         print(output)
         return output["p-value"] < conf_level
@@ -279,12 +297,10 @@ class MMAR:
             conf_level (float, optional): confidence level. Defaults to 0.05.
 
         See [statsmodels](https://www.statsmodels.org/dev/examples/notebooks/generated/stationarity_detrending_adf_kpss.html):
-            Case 1: Both tests conclude that the series is not stationary - The series is not stationary
-            Case 2: Both tests conclude that the series is stationary - The series is stationary
-            Case 3: KPSS indicates stationarity and ADF indicates non-stationarity - The series is trend stationary.
-                    Trend needs to be removed to make series strict stationary. The detrended series is checked for stationarity.
-            Case 4: KPSS indicates non-stationarity and ADF indicates stationarity - The series is difference stationary.
-                    Differencing is to be used to make series stationary. The differenced series is checked for stationarity.
+            * Case 1: Both tests conclude that the series is not stationary - The series is not stationary
+            * Case 2: Both tests conclude that the series is stationary - The series is stationary
+            * Case 3: KPSS indicates stationarity and ADF indicates non-stationarity - The series is trend stationary. Trend needs to be removed to make series strict stationary. The detrended series is checked for stationarity.
+            * Case 4: KPSS indicates non-stationarity and ADF indicates stationarity - The series is difference stationary. Differencing is to be used to make series stationary. The differenced series is checked for stationarity.
 
         Returns:
             None
@@ -316,7 +332,7 @@ class MMAR:
         """
         timeseries = np.diff(self._log_prices)
         test = jarque_bera(timeseries)
-        if test.pvalue < conf_level:
+        if test.pvalue < conf_level: # type: ignore
             print("The time series is not Normal distributed")
         else:
             print("The time series is Normal distributed")
@@ -352,7 +368,7 @@ class MMAR:
         Returns:
             float: tau(x)
         """
-        return np.interp(x, xp=self.q, fp=self.tau)
+        return cast(float,np.interp(x, xp=self.q, fp=self.tau))
 
     def legendre(self, alpha: float) -> float:
         """Compute Legendre transformation
@@ -471,11 +487,11 @@ class MMAR:
             tuple[np.ndarray[float], float]: Theta values, returns volatility
         """
         alpha = np.arange(0.001, 1.101, 0.001)
-        spectr = np.array([self.legendre(x, self.q, self.tau) for x in alpha])
-        self._m = alpha[np.where(spectr < 0.99)[-1][-1]]
+        spectr = np.array([self.legendre(x) for x in alpha])
+        self._m = cast(float,alpha[np.where(spectr < 0.99)[-1][-1]])
         b = 2
         K = int(np.log2(len(self.price)))
-        self._mu = self._m / self.H
+        self._mu = self.m / self.H
         self._sigma = np.sqrt((2 * (self.mu - 1)) / np.log(b))
 
         if self._volume is None:
@@ -497,7 +513,7 @@ class MMAR:
             self._theta = volume / np.sum(volume)
 
         ret = np.diff(self._log_prices)
-        self._sigma_ret = np.std(ret)
+        self._sigma_ret = cast(float,np.std(ret))
 
         return self._theta, self._sigma_ret
 
@@ -549,7 +565,7 @@ class MMAR:
     def plot_scaling(self) -> None:
         """Plot the scaling function"""
 
-        hypothetical_tau = 0.5 * self._q - 1
+        hypothetical_tau = 0.5 * self.q - 1
         fig, ax = plt.subplots(1, 2, figsize=(18, 6))
         ax[0].plot(
             self._q,
@@ -643,9 +659,9 @@ class MMAR:
 
         Returns:
             None
-        """
+        """  # noqa: W605
 
-        m = self._m
+        m = self.m
         H = self.H
         alpha = np.linspace(self.alpha_min, m, num=15)
 

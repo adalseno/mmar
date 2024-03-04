@@ -163,12 +163,11 @@ Wrapper aorund statsmodels.tsa.stattools.adfuller</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="src.MMAR.MMAR.MMAR.alpha_min">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alpha_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.MMAR.MMAR.MMAR.alpha_min" title="Link to this definition"></a></dt>
-<dd><p>Alpha zero</p>
-<div class="math notranslate nohighlight">
-\[\alpha_{0}\]</div>
+<dd><p>Alpha min</p>
+<p>The minimum allowable value for alpha</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>alpha zero</p>
+<dd class="field-odd"><p>alpha min</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
@@ -221,17 +220,13 @@ Wrapper aorund statsmodels.tsa.stattools.adfuller</p>
 <dd class="field-odd"><p><strong>conf_level</strong> (<em>float</em><em>, </em><em>optional</em>) – confidence level. Defaults to 0.05.</p>
 </dd>
 </dl>
-<dl>
-<dt>See [statsmodels](<a class="reference external" href="https://www.statsmodels.org/dev/examples/notebooks/generated/stationarity_detrending_adf_kpss.html">https://www.statsmodels.org/dev/examples/notebooks/generated/stationarity_detrending_adf_kpss.html</a>):</dt><dd><p>Case 1: Both tests conclude that the series is not stationary - The series is not stationary
-Case 2: Both tests conclude that the series is stationary - The series is stationary
-Case 3: KPSS indicates stationarity and ADF indicates non-stationarity - The series is trend stationary.</p>
-<blockquote>
-<div><p>Trend needs to be removed to make series strict stationary. The detrended series is checked for stationarity.</p>
-</div></blockquote>
 <dl class="simple">
-<dt>Case 4: KPSS indicates non-stationarity and ADF indicates stationarity - The series is difference stationary.</dt><dd><p>Differencing is to be used to make series stationary. The differenced series is checked for stationarity.</p>
-</dd>
-</dl>
+<dt>See [statsmodels](<a class="reference external" href="https://www.statsmodels.org/dev/examples/notebooks/generated/stationarity_detrending_adf_kpss.html">https://www.statsmodels.org/dev/examples/notebooks/generated/stationarity_detrending_adf_kpss.html</a>):</dt><dd><ul class="simple">
+<li><p>Case 1: Both tests conclude that the series is not stationary - The series is not stationary</p></li>
+<li><p>Case 2: Both tests conclude that the series is stationary - The series is stationary</p></li>
+<li><p>Case 3: KPSS indicates stationarity and ADF indicates non-stationarity - The series is trend stationary. Trend needs to be removed to make series strict stationary. The detrended series is checked for stationarity.</p></li>
+<li><p>Case 4: KPSS indicates non-stationarity and ADF indicates stationarity - The series is difference stationary. Differencing is to be used to make series stationary. The differenced series is checked for stationarity.</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -282,11 +277,21 @@ Case 3: KPSS indicates stationarity and ADF indicates non-stationarity - The ser
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – number to compute divisors</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>divisors</p>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The choice for the scale factor is arbitrary and different scales will give different outcomes.
+Using the divisors is <em>time agnostic*</em>.
+An alternative might be to choose a different range of scales according to the time horizon of the series.
+E.g., for daily data: <cite>[1, 5, 10, 15, 21, 63, 126, 252]</cite>,
+that is daily, weekly, bi-weekly, three-weekly, month, quarter, half-year, year.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>divisors</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.ndarray[int]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray[int]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -429,6 +434,10 @@ Wrapper aorund statsmodels.tsa.stattools.kpss</p>
 <p>Is the first exponent that makes the multifractal spectrum = 1</p>
 <div class="math notranslate nohighlight">
 \[m_{\alpha}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It’s also called <span class="math notranslate nohighlight">\(\alpha_{0}\)</span></p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>m of alpha</p>
@@ -445,6 +454,10 @@ Wrapper aorund statsmodels.tsa.stattools.kpss</p>
 <dd><p>Mu of alpha</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}\mu_{\alpha} = \frac {m_{\alpha}}{H}\\\textrm{where } f_{\theta}(\mu_{\alpha}) = 1\end{aligned}\end{align} \]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It’s also called <span class="math notranslate nohighlight">\(\lambda\)</span></p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Mu</p>
