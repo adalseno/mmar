@@ -49,13 +49,21 @@
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-src.utility_functions">src.utility_functions module</a><ul>
 <li><a class="reference internal" href="#src.utility_functions.backtest_strategy"><code class="docutils literal notranslate"><span class="pre">backtest_strategy()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.compare_qq_plots"><code class="docutils literal notranslate"><span class="pre">compare_qq_plots()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.compare_return_distribution"><code class="docutils literal notranslate"><span class="pre">compare_return_distribution()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.display_report"><code class="docutils literal notranslate"><span class="pre">display_report()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.get_df"><code class="docutils literal notranslate"><span class="pre">get_df()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.get_standard_returns"><code class="docutils literal notranslate"><span class="pre">get_standard_returns()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.objective_catboost"><code class="docutils literal notranslate"><span class="pre">objective_catboost()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.objective_lightgbm"><code class="docutils literal notranslate"><span class="pre">objective_lightgbm()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.objective_logistic_regression"><code class="docutils literal notranslate"><span class="pre">objective_logistic_regression()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.objective_random_forest"><code class="docutils literal notranslate"><span class="pre">objective_random_forest()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.objective_svc"><code class="docutils literal notranslate"><span class="pre">objective_svc()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.plot_feature_imp"><code class="docutils literal notranslate"><span class="pre">plot_feature_imp()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.plot_ks_comparison"><code class="docutils literal notranslate"><span class="pre">plot_ks_comparison()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.plot_multiple_return_comparison"><code class="docutils literal notranslate"><span class="pre">plot_multiple_return_comparison()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.plot_return_comparison"><code class="docutils literal notranslate"><span class="pre">plot_return_comparison()</span></code></a></li>
+<li><a class="reference internal" href="#src.utility_functions.plot_simulated_paths"><code class="docutils literal notranslate"><span class="pre">plot_simulated_paths()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.plot_strategy"><code class="docutils literal notranslate"><span class="pre">plot_strategy()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.select_threshold"><code class="docutils literal notranslate"><span class="pre">select_threshold()</span></code></a></li>
 <li><a class="reference internal" href="#src.utility_functions.tune_params"><code class="docutils literal notranslate"><span class="pre">tune_params()</span></code></a></li>
@@ -171,6 +179,36 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.compare_qq_plots">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">compare_qq_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#compare_qq_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.compare_qq_plots" title="Link to this definition"></a></dt>
+<dd><p>QQ plot comparison</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Original data</p></li>
+<li><p><strong>simulation</strong> (<em>np.ndarray</em>) – simulations</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – number of steps</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.compare_return_distribution">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">compare_return_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#compare_return_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.compare_return_distribution" title="Link to this definition"></a></dt>
+<dd><p>Plot distribution of returns for some sample data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Original data</p></li>
+<li><p><strong>simulation</strong> (<em>np.ndarray</em>) – simulations</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – number of steps</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="src.utility_functions.display_report">
 <span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">display_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#display_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.display_report" title="Link to this definition"></a></dt>
 <dd><p>Display classification report and confusion matrix</p>
@@ -186,6 +224,28 @@
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple[float,float,float,float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.get_df">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">get_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#get_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.get_df" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.get_standard_returns">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">get_standard_returns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#get_standard_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.get_standard_returns" title="Link to this definition"></a></dt>
+<dd><p>Standardize series</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>pd.Series</em>) – Price series</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>standardized returns</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.Series</p>
 </dd>
 </dl>
 </dd></dl>
@@ -317,6 +377,65 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>coefficients</strong> (<em>np.ndarray</em><em>[</em><em>float</em><em>]</em>) – coefficients</p></li>
 <li><p><strong>columns</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – feature names</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.plot_ks_comparison">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">plot_ks_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#plot_ks_comparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.plot_ks_comparison" title="Link to this definition"></a></dt>
+<dd><p>Bar plot for Kolmogorov-Smirnov test for goodness of fit results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res_list</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – list of results</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – plot title. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.plot_multiple_return_comparison">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">plot_multiple_return_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#plot_multiple_return_comparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.plot_multiple_return_comparison" title="Link to this definition"></a></dt>
+<dd><p>Plot multiple log returns comparison</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Original data</p></li>
+<li><p><strong>simulation</strong> (<em>np.ndarray</em>) – simulations</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – number of steps</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.plot_return_comparison">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">plot_return_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#plot_return_comparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.plot_return_comparison" title="Link to this definition"></a></dt>
+<dd><p>Plot the log returns comparison</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Original data</p></li>
+<li><p><strong>simulation</strong> (<em>np.ndarray</em>) – simulations</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – number of steps</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utility_functions.plot_simulated_paths">
+<span class="sig-prename descclassname"><span class="pre">src.utility_functions.</span></span><span class="sig-name descname"><span class="pre">plot_simulated_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/utility_functions.html#plot_simulated_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utility_functions.plot_simulated_paths" title="Link to this definition"></a></dt>
+<dd><p>Plot simulated paths (example)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Original data</p></li>
+<li><p><strong>simulation</strong> (<em>np.ndarray</em>) – simulations</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – number of steps</p></li>
 </ul>
 </dd>
 </dl>

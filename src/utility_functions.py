@@ -25,6 +25,10 @@ from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
+import yfinance as yf
+from statsmodels.graphics.gofplots import qqplot
+
+
 
 
 def display_report(
@@ -538,3 +542,174 @@ def tune_params(
     if hashseed is not None:
         os.environ["PYTHONHASHSEED"] = hashseed
     return trial.params
+
+def get_df(path: str, start_date:str, end_date:str) -> pd.DataFrame:
+    if os.path.isfile(path):
+        df = pd.read_csv(path, parse_dates=True, index_col=0)
+    else:
+        df = yf.download("SPY", start=start_date, end=end_date)
+        df.to_csv(path)
+    return df
+
+def get_standard_returns(s: pd.Series) -> pd.Series:
+    """Standardize series
+
+    Args:
+        s (pd.Series): Price series
+
+    Returns:
+        pd.Series: standardized returns
+    """
+    log_returns = np.diff(np.log(s))
+    norm_log_returns = (log_returns - np.mean(log_returns)) / np.std(log_returns)
+    return pd.Series(norm_log_returns)
+
+def plot_ks_comparison(res_list: list[float], title: str | None = None) -> None:
+    """Bar plot for Kolmogorov-Smirnov test for goodness of fit results
+
+    Args:
+        res_list (list[float]): list of results
+        title (str | None, optional): plot title. Defaults to None.
+    """
+    results = pd.Series(res_list)
+    res = results.value_counts()
+    results_dict = {}
+    try:
+        results_dict["True"] = res[True]
+    except KeyError:  # True is not present
+        results_dict["True"] = 0
+    results_dict["False"] = len(results) - results_dict["True"]
+    if title is None:
+        title = "Percentage of simulated data that passed Kolmogorov-Smirnov test for goodness of fit."
+    plt.figure(figsize=(16, 7))
+    barplot = plt.bar(
+        results_dict.keys(),
+        (np.array(list(results_dict.values())) / len(results)) * 100,
+    )
+    plt.title(title)
+
+    # set y axis as percentage
+    ax = plt.gca()
+    ax.set_ylim(0, 110)
+    vals = ax.get_yticks()
+    vals = [x for x in vals if x <= 100]
+    ax.yaxis.set_ticks(vals)
+    ax.set_yticklabels([f"{x/100:.2%}" for x in vals])
+    ax.bar_label(barplot, fmt="%.2f")
+    plt.show()
+    return
+
+def plot_return_comparison(df: pd.DataFrame, simulation: np.ndarray, n: int) -> None:
+    """Plot the log returns comparison
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    fig, ax = plt.subplots(1, 2, figsize=(20, 6), sharex=True, sharey=True)
+    spy_log_diff = np.diff(np.log(df.iloc[-n:]["Close"]))
+    ax[0].plot(df.iloc[-n + 1 :].index, spy_log_diff)
+    ax[0].axhline(0.0, c="r", ls="--")
+    ax[0].set_title("Log returns for original series")
+    ax[0].set_xlabel("Date")
+    ax[0].set_ylabel("Log returns")
+    idx = np.random.choice(range(len(simulation)), 1)[0]
+    ax[1].plot(df.iloc[-n + 1 :].index, np.diff(np.log(simulation[idx,])))
+    ax[1].axhline(0.0, c="r", ls="--")
+    ax[1].set_title(f"Log returns for simulated series (one sample: {idx=})")
+    ax[1].set_xlabel("Date")
+    ax[1].set_ylabel("Log returns")
+
+    plt.show()
+    return
+
+def plot_simulated_paths(df: pd.DataFrame, simulation: np.ndarray, n: int) -> None:
+    """Plot simulated paths (example)
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    fig, ax = plt.subplots(1, 1, figsize=(20, 6), sharex=False, sharey=False)
+
+    for i in range(50):
+        ax.plot(df.iloc[-n:].index, simulation[i,])
+    df.iloc[-n:]["Close"].plot(ax=ax, color="k", ls="--")
+    plt.title("Sample of generated paths")
+    plt.ylabel("Price $")
+    plt.show()
+    return
+
+def compare_qq_plots(df:pd.DataFrame, simulation:np.ndarray, n:int)->None:
+    """QQ plot comparison
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    # Get normalized log returns form original data
+    norm_log_returns = get_standard_returns(df.iloc[-n:,]["Close"])
+    samples = np.random.choice(range(len(simulation)), size=5, replace=False)
+    fig, ax = plt.subplots(5, 2, figsize=(21, 25))
+    ax = ax.flatten()
+    for i, idx in enumerate(samples):
+        qqplot(norm_log_returns, line="45", ax=ax[i * 2])
+        ax[i * 2].set_title("Original returns")
+        qqplot(get_standard_returns(simulation[idx,]), line="45", ax=ax[i * 2 + 1])
+        ax[i * 2 + 1].set_title(f"Simulation n. {idx}")
+    plt.suptitle("Compare QQ plot for original returns and some simulations")
+    plt.show()
+    return
+
+def plot_multiple_return_comparison(df:pd.DataFrame, simulation:np.ndarray, n:int)->None:
+    """Plot multiple log returns comparison
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    # Get normalized log returns form original data
+    norm_log_returns = get_standard_returns(df.iloc[-n:,]["Close"])
+    samples = np.random.choice(range(len(simulation)), size=5, replace=False)
+    fig, ax = plt.subplots(5, 2, figsize=(21, 25))
+    ax = ax.flatten()
+    x_index = np.arange(len(norm_log_returns))
+    for i, idx in enumerate(samples):
+        ax[i * 2].plot(x_index, norm_log_returns)
+        ax[i * 2].set_title("Original returns")
+        ax[i * 2 + 1].plot(x_index, get_standard_returns(simulation[idx,]))
+        ax[i * 2 + 1].set_title(f"Simulation n. {idx}")
+    plt.suptitle("Compare log returns for original returns and some simulations")
+    plt.show()
+    return
+
+def compare_return_distribution(df:pd.DataFrame, simulation:np.ndarray, n:int)->None:
+    """Plot distribution of returns for some sample data
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    # Get normalized log returns form original data
+    norm_log_returns = get_standard_returns(df.iloc[-n:,]["Close"])
+    samples = np.random.choice(range(len(simulation)), size=5, replace=False)
+    fig, ax = plt.subplots(5, 1, figsize=(16, 32))
+    ax = ax.flatten()
+    for i, idx in enumerate(samples):
+        ax[i].hist(norm_log_returns, bins=12, label="Original Returns", density=True)
+        ax[i].set_title("Returns Distribution")
+        ax[i].hist(
+            get_standard_returns(simulation[idx,]),
+            bins=12,
+            label=f"Simulation n. {idx}",
+            density=True,
+            alpha=0.5,
+        )
+        ax[i].legend()
+    plt.suptitle("Compare log returns for original returns and some simulations")
+    plt.show()
