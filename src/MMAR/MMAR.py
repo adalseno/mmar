@@ -509,7 +509,7 @@ class MMAR:
 
             self._theta = m2.flatten()
         else:
-            volume = self._volume[-np.power(b, K - 1) :]
+            volume = self._volume[-np.power(b, K) :]
             self._theta = volume / np.sum(volume)
 
         ret = np.diff(self._log_prices)
