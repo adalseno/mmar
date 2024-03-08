@@ -30,7 +30,7 @@ We used the class to compute the main parameters for the MMAR model and then use
 
 
 * For S&P500 ETF (SPY) data, we used [Yahoo Finance.](https://finance.yahoo.com/quote/SPY?.tsrc=fin-srch) 
-* For option chains data, we used [OptinosDX](https://www.optionsdx.com/).
+* For option chains data, we used [OptionsDX](https://www.optionsdx.com/).
 * For interest rates, we used [FRED](https://fred.stlouisfed.org/series/TB3MS).
 * [Alpha Avantage](https://www.alphavantage.co/documentation/) provides more granular data (not only daily but also intraday), but those data haven't been used in the final version.
 * dot files, such as *.env*, are clearly not uploaded to GitHub. You must create them locally with your API keys.
