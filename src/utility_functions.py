@@ -3,11 +3,14 @@ Helper functions
 
 
 """
+import os
+
 import lightgbm as lgb
 import matplotlib.pyplot as plt
 import numpy as np
 import optuna
 import pandas as pd
+import yfinance as yf
 from catboost import CatBoostClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
@@ -16,27 +19,34 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
     classification_report,
     confusion_matrix,
+    precision_score,
     roc_curve,
 )
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
+from statsmodels.graphics.gofplots import qqplot
 
 
-def display_report(y_test: np.ndarray, predictions: np.ndarray) -> None:
+def display_report(
+    y_test: np.ndarray, predictions: np.ndarray
+) -> tuple[float, float, float, float]:
     """Display classification report and confusion matrix
 
     Args:
         y_test (np.ndarray): true values
         predictions (np.ndarray): predicted values
+
+    Returns:
+        tuple[float,float,float,float]: true negative, false positive, false negative, true positive
     """
     print(classification_report(y_test, predictions))
     cm = confusion_matrix(y_test, predictions)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm)
     disp.plot()
     plt.show()
-    return
+    return cm.ravel()  # tn, fp, fn, tp
 
 
 def plot_feature_imp(coefficients: np.ndarray[float], columns: list[str]) -> None:
@@ -394,6 +404,9 @@ def objective_lightgbm(
     y_train: np.ndarray,
     metric: str,
     n_splits: int = 5,
+    seed: int = 1968,
+    max_iter: int = 35,
+    max_dep: int = 12,
 ) -> float:
     """Objective function for LightGBM
 
@@ -402,19 +415,29 @@ def objective_lightgbm(
         X_train (pd.DataFrame): train set
         y_train (np.ndarray): target
         metric (str): the metric used
-        n_splits (int, optional): number of splits in the CV. Defaults to 5.
+        n_splits (int, optional): number of splits in the CV. Defaults to 5
+        seed (int, optional): seed for Kfold. Default to 1968
+        max_iter (int, optional): maximun number of iterations, to prevent overfitting. Default to 35
+        max_dep (int, optional): maximum depth, to prevent overfitting. Default to 12
 
     Returns:
         float: mean score (with penalty)
     """
+    # Limit the number of iterations and max_depth
+    # when we have enough features to prevent overfitting
+
     param = {
         "objective": "binary",
-        "metric": "average_precision",
+        "metric": metric,
         "verbosity": -1,
         "boosting_type": "gbdt",
         "random_state": 1968,
-        "lambda_l1": trial.suggest_float("lambda_l1", 1e-8, 10.0, log=True),
-        "lambda_l2": trial.suggest_float("lambda_l2", 1e-8, 10.0, log=True),
+        "early_stopping_round": 15,
+        "n_estimators": trial.suggest_int(
+            "n_estimators", 10, max_iter, step=5, log=False
+        ),
+        "lambda_l1": trial.suggest_float("lambda_l1", 1e-8, 20.0, log=True),
+        "lambda_l2": trial.suggest_float("lambda_l2", 1e-8, 20.0, log=True),
         "num_leaves": trial.suggest_int("num_leaves", 2, 256),
         "min_sum_hessian_in_leaf": trial.suggest_float(
             "min_sum_hessian_in_leaf", 1e-6, 10.0, log=True
@@ -427,17 +450,264 @@ def objective_lightgbm(
         "bagging_freq": trial.suggest_int("bagging_freq", 1, 7),
         "min_child_samples": trial.suggest_int("min_child_samples", 5, 100),
         "num_grad_quant_bins": trial.suggest_int("num_grad_quant_bins", 4, 12),
-        "max_depth": trial.suggest_int("max_depth", 2, 18),
+        "max_depth": trial.suggest_int("max_depth", 2, max_dep),
         "extra_trees": trial.suggest_categorical("extra_trees", [True, False]),
     }
-    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=1968)
-    score = cross_val_score(
-        lgb.LGBMClassifier(**param),
-        X_train.fillna(0.0),
-        y_train,
-        cv=cv,
-        scoring=metric,
-        n_jobs=1,
-    )
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=seed)
+    scores = []
+    for train_index, test_index in cv.split(X_train, y_train):
+        X_train_set, X_test = X_train.iloc[train_index], X_train.iloc[test_index]
+        y_train_set, y_test = y_train[train_index], y_train[test_index]
+
+        # Train a LightGBM model
+        model = lgb.LGBMClassifier(**param)
+        model.fit(
+            X_train_set,
+            y_train_set,
+            eval_set=(X_test, y_test),
+            eval_metric=metric,
+        )
+
+        # Make predictions on the test set
+        y_pred = model.predict(X_test)
+        # Calculate accuracy and store it in the metrics list
+        score = precision_score(y_test, y_pred)
+        scores.append(score)
+        # Log to see the best iteration
+        """ logging.warning(
+            "Best iterations: %s for trial number %s with score %s", model.best_iteration_, trial.number, np.round(score,4)
+        ) """
+
     # Penalize score dispersion
-    return score.mean() * (1 - score.std())
+    return np.mean(scores) * (1 - np.std(scores))
+
+
+def tune_params(
+    X_train: pd.DataFrame,
+    y_train: np.ndarray,
+    metric: str,
+    timeout: int,
+    max_iter: int = 35,
+    max_dep: int = 12,
+    n_splits: int = 5,
+) -> dict:
+    """Tune hyperparameters using Otuna
+
+    Args:
+        X_train (pd.DataFrame): Train set
+        y_train (np.ndarray): train labels
+        metric (str): metric to use
+        timeout (int): timeout
+        max_iter (int, optional): maximun number of iterations, to prevent overfitting. Default to 35
+        max_dep (int, optional): maximum depth, to prevent overfitting. Default to 12
+        n_splits (int, optional): number of splits in Kfold. Default to 5
+
+    Returns:
+        dict: tuned parameters
+    """
+    # Set hash seed for reproducibility
+    hashseed = os.getenv("PYTHONHASHSEED")
+    os.environ["PYTHONHASHSEED"] = "0"
+    study = optuna.create_study(
+        direction="maximize",
+        sampler=optuna.samplers.TPESampler(seed=1968, n_startup_trials=0),
+    )
+    study.optimize(
+        lambda trial: objective_lightgbm(
+            trial,
+            X_train,
+            y_train,
+            metric,
+            max_iter=max_iter,
+            max_dep=max_dep,
+            n_splits=n_splits,
+        ),
+        n_trials=150,
+        timeout=timeout,
+    )
+
+    print("Number of finished trials: {}".format(len(study.trials)))
+
+    print("Best trial:")
+    trial = study.best_trial
+    print(f"  Number: {trial.number}")
+    print(f"  Value: {trial.value}")
+
+    print("  Params: ")
+    for key, value in trial.params.items():
+        print(f"    {key}: {value}")
+    # Restore hash seed
+    if hashseed is not None:
+        os.environ["PYTHONHASHSEED"] = hashseed
+    return trial.params
+
+def get_df(path: str, start_date:str, end_date:str) -> pd.DataFrame:
+    if os.path.isfile(path):
+        df = pd.read_csv(path, parse_dates=True, index_col=0)
+    else:
+        df = yf.download("SPY", start=start_date, end=end_date)
+        df.to_csv(path)
+    return df
+
+def get_standard_returns(s: pd.Series) -> pd.Series:
+    """Standardize series
+
+    Args:
+        s (pd.Series): Price series
+
+    Returns:
+        pd.Series: standardized returns
+    """
+    log_returns = np.diff(np.log(s))
+    norm_log_returns = (log_returns - np.mean(log_returns)) / np.std(log_returns)
+    return pd.Series(norm_log_returns)
+
+def plot_ks_comparison(res_list: list[float], title: str | None = None) -> None:
+    """Bar plot for Kolmogorov-Smirnov test for goodness of fit results
+
+    Args:
+        res_list (list[float]): list of results
+        title (str | None, optional): plot title. Defaults to None.
+    """
+    results = pd.Series(res_list)
+    res = results.value_counts()
+    results_dict = {}
+    try:
+        results_dict["True"] = res[True]
+    except KeyError:  # True is not present
+        results_dict["True"] = 0
+    results_dict["False"] = len(results) - results_dict["True"]
+    if title is None:
+        title = "Percentage of simulated data that passed Kolmogorov-Smirnov test for goodness of fit."
+    plt.figure(figsize=(16, 7))
+    barplot = plt.bar(
+        results_dict.keys(),
+        (np.array(list(results_dict.values())) / len(results)) * 100,
+    )
+    plt.title(title)
+
+    # set y axis as percentage
+    ax = plt.gca()
+    ax.set_ylim(0, 110)
+    vals = ax.get_yticks()
+    vals = [x for x in vals if x <= 100]
+    ax.yaxis.set_ticks(vals)
+    ax.set_yticklabels([f"{x/100:.2%}" for x in vals])
+    ax.bar_label(barplot, fmt="%.2f")
+    plt.show()
+    return
+
+def plot_return_comparison(df: pd.DataFrame, simulation: np.ndarray, n: int) -> None:
+    """Plot the log returns comparison
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    fig, ax = plt.subplots(1, 2, figsize=(20, 6), sharex=True, sharey=True)
+    spy_log_diff = np.diff(np.log(df.iloc[-n:]["Close"]))
+    ax[0].plot(df.iloc[-n + 1 :].index, spy_log_diff)
+    ax[0].axhline(0.0, c="r", ls="--")
+    ax[0].set_title("Log returns for original series")
+    ax[0].set_xlabel("Date")
+    ax[0].set_ylabel("Log returns")
+    idx = np.random.choice(range(len(simulation)), 1)[0]
+    ax[1].plot(df.iloc[-n + 1 :].index, np.diff(np.log(simulation[idx,])))
+    ax[1].axhline(0.0, c="r", ls="--")
+    ax[1].set_title(f"Log returns for simulated series (one sample: {idx=})")
+    ax[1].set_xlabel("Date")
+    ax[1].set_ylabel("Log returns")
+
+    plt.show()
+    return
+
+def plot_simulated_paths(df: pd.DataFrame, simulation: np.ndarray, n: int) -> None:
+    """Plot simulated paths (example)
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    fig, ax = plt.subplots(1, 1, figsize=(20, 6), sharex=False, sharey=False)
+
+    for i in range(50):
+        ax.plot(df.iloc[-n:].index, simulation[i,])
+    df.iloc[-n:]["Close"].plot(ax=ax, color="k", ls="--")
+    plt.title("Sample of generated paths")
+    plt.ylabel("Price $")
+    plt.show()
+    return
+
+def compare_qq_plots(df:pd.DataFrame, simulation:np.ndarray, n:int)->None:
+    """QQ plot comparison
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    # Get normalized log returns form original data
+    norm_log_returns = get_standard_returns(df.iloc[-n:,]["Close"])
+    samples = np.random.choice(range(len(simulation)), size=5, replace=False)
+    fig, ax = plt.subplots(5, 2, figsize=(21, 25))
+    ax = ax.flatten()
+    for i, idx in enumerate(samples):
+        qqplot(norm_log_returns, line="45", ax=ax[i * 2])
+        ax[i * 2].set_title("Original returns")
+        qqplot(get_standard_returns(simulation[idx,]), line="45", ax=ax[i * 2 + 1])
+        ax[i * 2 + 1].set_title(f"Simulation n. {idx}")
+    plt.suptitle("Compare QQ plot for original returns and some simulations")
+    plt.show()
+    return
+
+def plot_multiple_return_comparison(df:pd.DataFrame, simulation:np.ndarray, n:int)->None:
+    """Plot multiple log returns comparison
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    # Get normalized log returns form original data
+    norm_log_returns = get_standard_returns(df.iloc[-n:,]["Close"])
+    samples = np.random.choice(range(len(simulation)), size=5, replace=False)
+    fig, ax = plt.subplots(5, 2, figsize=(21, 25))
+    ax = ax.flatten()
+    x_index = np.arange(len(norm_log_returns))
+    for i, idx in enumerate(samples):
+        ax[i * 2].plot(x_index, norm_log_returns)
+        ax[i * 2].set_title("Original returns")
+        ax[i * 2 + 1].plot(x_index, get_standard_returns(simulation[idx,]))
+        ax[i * 2 + 1].set_title(f"Simulation n. {idx}")
+    plt.suptitle("Compare log returns for original returns and some simulations")
+    plt.show()
+    return
+
+def compare_return_distribution(df:pd.DataFrame, simulation:np.ndarray, n:int)->None:
+    """Plot distribution of returns for some sample data
+
+    Args:
+        df (pd.DataFrame): Original data
+        simulation (np.ndarray): simulations
+        n (int): number of steps
+    """
+    # Get normalized log returns form original data
+    norm_log_returns = get_standard_returns(df.iloc[-n:,]["Close"])
+    samples = np.random.choice(range(len(simulation)), size=5, replace=False)
+    fig, ax = plt.subplots(5, 1, figsize=(16, 32))
+    ax = ax.flatten()
+    for i, idx in enumerate(samples):
+        ax[i].hist(norm_log_returns, bins=12, label="Original Returns", density=True)
+        ax[i].set_title("Returns Distribution")
+        ax[i].hist(
+            get_standard_returns(simulation[idx,]),
+            bins=12,
+            label=f"Simulation n. {idx}",
+            density=True,
+            alpha=0.5,
+        )
+        ax[i].legend()
+    plt.suptitle("Compare log returns for original returns and some simulations")
+    plt.show()
