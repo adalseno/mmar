@@ -35,4 +35,4 @@ We used the class to compute the main parameters for the MMAR model and then use
 * [Alpha Avantage](https://www.alphavantage.co/documentation/) provides more granular data (not only daily but also intraday), but those data haven't been used in the final version.
 * dot files, such as *.env*, are clearly not uploaded to GitHub. You must create them locally with your API keys.
 * There are many notebooks in the experiments branch that were not included in the final version, but might be interesting to explore. However, that branch is serveral commit behind, so don't expect the notebooks to work without some manual fixes.
-* A basic documentation for the MMAR class, built using [Sphinx](https://www.sphinx-doc.org/en/master/), is available on GitHub Pages.
+* A basic documentation for the MMAR class, built using [Sphinx](https://www.sphinx-doc.org/en/master/), is available on [GitHub Pages](https://adalseno.github.io/mmar/).
